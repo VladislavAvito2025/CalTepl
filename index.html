@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Калькулятор стоимости теплицы</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007BFF;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+            outline: none;
+        }
+
+        .form-group input[type="number"] {
+            width: calc(100% - 22px);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            animation: slideUp 0.5s ease-in-out;
+            cursor: pointer;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #0056b3, #003f7f);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-width: 90%;
+            width: 400px;
+            text-align: left;
+        }
+
+        .popup-content {
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .popup button.copy-btn {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .popup button.copy-btn:hover {
+            background: #0056b3;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.5em;
+            }
+
+            h1 {
+                font-size: 1.2em;
+            }
+
+            .form-group input,
+            .form-group select {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+
+            button {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+
+            .result {
+                font-size: 1em;
+            }
+
+            .popup {
+                width: 90%;
+            }
+        }
+
+        .form-group.param {
+            background-color: #f0f8ff;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .form-group.param label {
+            color: #007BFF;
+        }
+
+        .additional-products {
+            margin-top: 20px;
+        }
+
+        .additional-products .product {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .additional-products .product select,
+        .additional-products .product input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        /* Стили для кнопки удаления */
+        .additional-products .product .remove-btn {
+            padding: 8px;
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            transition: background 0.3s ease;
+        }
+
+        .additional-products .product .remove-btn:hover {
+            background: #cc0000;
+        }
+
+        .additional-products .add-product-btn {
+            padding: 8px 12px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            margin-top: 10px;
+            width: auto;
+        }
+
+        .additional-products .add-product-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">ЛУКОМОРЬЕ</div>
+        <h1>Калькулятор стоимости теплицы</h1>
+        <div class="form-group param">
+            <label for="type">Тип теплицы:</label>
+            <select id="type" onchange="updateFrameOptions()">
+                <option value="5000">Арочная</option>
+                <option value="6000">Прямостенная</option>
+                <option value="7000">Каплевидная</option>
+                <option value="8000">Домиком</option>
+            </select>
+        </div>
+        <div class="form-group param">
+            <label for="width">Ширина теплицы (м):</label>
+            <select id="width">
+                <option value="2.5">2.5 м</option>
+                <option value="3">3 м</option>
+                <option value="3.5">3.5 м</option>
+                <option value="4">4 м</option>
+            </select>
+        </div>
+        <div class="form-group param">
+            <label for="length">Длина теплицы (м):</label>
+            <select id="length">
+                <option value="4">4 м</option>
+                <option value="6">6 м</option>
+                <option value="8">8 м</option>
+                <option value="10">10 м</option>
+                <option value="12">12 м</option>
+                <option value="14">14 м</option>
+            </select>
+        </div>
+        <div class="form-group param">
+            <label for="frame">Каркас теплицы:</label>
+            <select id="frame">
+                <!-- Опции будут обновляться динамически -->
+            </select>
+        </div>
+        <div class="form-group param">
+            <label for="polycarbonate">Толщина поликарбоната:</label>
+            <select id="polycarbonate">
+                <option value="200">Поликарбонат Стандарт 4 мм</option>
+                <option value="300">Поликарбонат Люкс 4 мм</option>
+                <option value="400">Поликарбонат Премиум 6 мм</option>
+                <option value="0">Без поликарбоната</option>
+            </select>
+        </div>
+        <div class="form-group param">
+            <label for="arc-step">Шаг дуги:</label>
+            <select id="arc-step">
+                <option value="1">1 м</option>
+                <option value="0.65">0.65 м</option>
+            </select>
+        </div>
+        <div class="form-group param">
+            <label for="foundation">Фундамент:</label>
+            <select id="foundation">
+                <option value="0">Без фундамента</option>
+                <option value="5000">Брус</option>
+                <option value="10000">Сваи</option>
+            </select>
+        </div>
+        <div class="form-group param">
+            <label for="assembly">Сборка:</label>
+            <select id="assembly">
+                <option value="0">Без сборки</option>
+                <option value="1">С нашей сборкой</option>
+            </select>
+        </div>
+        <div class="form-group param">
+            <label for="delivery">Доставка (км):</label>
+            <input type="number" id="delivery" min="0" placeholder="Введите расстояние">
+        </div>
+        <div class="additional-products">
+            <div class="form-group param">
+                <label>Дополнительные товары:</label>
+                <div id="products-list">
+                    <!-- Сюда будут добавляться товары -->
+                </div>
+                <button class="add-product-btn" onclick="addProduct()">+ Добавить товар</button>
+            </div>
+        </div>
+        <button onclick="calculate()">Рассчитать стоимость</button>
+        <div class="result" id="result" onclick="showCalculation()">Общая стоимость: 0 руб</div>
+    </div>
+
+    <!-- Всплывающее сообщение -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+        <div class="popup-content" id="popup-content">
+            <!-- Содержимое будет заполнено динамически -->
+        </div>
+        <button class="copy-btn" onclick="copyToClipboard()">Скопировать</button>
+    </div>
+
+    <script>
+        // Каркасы для каждого типа теплицы
+        const frameOptions = {
+            "Арочная": [
+                { value: 300, label: "20х20" },
+                { value: 400, label: "40х20" },
+                { value: 500, label: "20х20 + 20х20" },
+                { value: 600, label: "40х20 + 20х20" }
+            ],
+            "Прямостенная": [
+                { value: 400, label: "40х20" },
+                { value: 600, label: "40х20 + 20х20" }
+            ],
+            "Каплевидная": [
+                { value: 400, label: "40х20" }
+            ],
+            "Домиком": [
+                { value: 400, label: "40х20" },
+                { value: 600, label: "40х20 + 20х20" }
+            ]
+        };
+
+        // Высота теплицы в зависимости от типа и ширины
+        const heightOptions = {
+            "Арочная": {
+                "2.5": "2.1 м",
+                "3": "2.1 м",
+                "3.5": "2.1 м",
+                "4": "2.8 м"
+            },
+            "Прямостенная": {
+                "2.5": "2.1 м",
+                "3": "2.1 м",
+                "3.5": "2.1 м",
+                "4": "2.8 м"
+            },
+            "Каплевидная": {
+                "2.5": "2.4 м",
+                "3": "2.4 м",
+                "3.5": "2.8 м"
+            },
+            "Домиком": {
+                "2.5": "2.2 м",
+                "3": "2.3 м",
+                "3.5": "2.8 м",
+                "4": "2.8 м"
+            }
+        };
+
+        // Снеговая нагрузка в зависимости от типа, каркаса и ширины
+        const snowLoad = {
+            "Арочная": {
+                "20х20": "227 кг/м²",
+                "40х20": "272 кг/м²",
+                "20х20 + 20х20": "314 кг/м²",
+                "40х20 + 20х20": {
+                    "2.5": "825 кг/м²",
+                    "3": "825 кг/м²",
+                    "3.5": "825 кг/м²",
+                    "4": "931 кг/м²"
+                }
+            },
+            "Каплевидная": {
+                "40х20": "492 кг/м²"
+            },
+            "Домиком": {
+                "40х20": "483 кг/м²",
+                "40х20 + 20х20": {
+                    "2.5": "1142 кг/м²",
+                    "3": "1142 кг/м²",
+                    "3.5": "1142 кг/м²",
+                    "4": "1328 кг/м²"
+                }
+            },
+            "Прямостенная": {
+                "40х20": "284 кг/м²",
+                "40х20 + 20х20": "838 кг/м²"
+            }
+        };
+
+        // Количество стяжек в зависимости от типа и ширины
+        const tiesCount = {
+            "Арочная": {
+                "2.5": "5 шт",
+                "3": "5 шт",
+                "3.5": "5 шт",
+                "4": "9 шт"
+            },
+            "Прямостенная": {
+                "2.5": "7 шт",
+                "3": "7 шт",
+                "3.5": "7 шт",
+                "4": "9 шт"
+            },
+            "Каплевидная": {
+                "2.5": "6 шт",
+                "3": "6 шт",
+                "3.5": "8 шт"
+            },
+            "Домиком": {
+                "2.5": "6 шт",
+                "3": "6 шт",
+                "3.5": "8 шт",
+                "4": "8 шт"
+            }
+        };
+
+        // Стоимость сборки в зависимости от типа, ширины и длины
+        const assemblyCost = {
+            "Арочная": {
+                "2.5": {
+                    "4": 4990,
+                    "6": 6490,
+                    "8": 7990,
+                    "10": 9490,
+                    "12": 11990
+                },
+                "3": {
+                    "4": 4990,
+                    "6": 6490,
+                    "8": 7990,
+                    "10": 9490,
+                    "12": 11990
+                },
+                "3.5": {
+                    "4": 5990,
+                    "6": 7990,
+                    "8": 9990,
+                    "10": 11990,
+                    "12": 13990
+                },
+                "4": {
+                    "4": 7990,
+                    "6": 11490,
+                    "8": 14990,
+                    "10": 18490,
+                    "12": 22490
+                }
+            },
+            "Прямостенная": {
+                "2.5": {
+                    "4": 5990,
+                    "6": 7990,
+                    "8": 9990,
+                    "10": 11990,
+                    "12": 13990
+                },
+                "3": {
+                    "4": 5990,
+                    "6": 7990,
+                    "8": 9990,
+                    "10": 11990,
+                    "12": 13990
+                },
+                "3.5": {
+                    "4": 5990,
+                    "6": 7990,
+                    "8": 9990,
+                    "10": 11990,
+                    "12": 13990
+                },
+                "4": {
+                    "4": 7990,
+                    "6": 11490,
+                    "8": 14990,
+                    "10": 18490,
+                    "12": 22490
+                }
+            },
+            "Каплевидная": {
+                "2.5": {
+                    "4": 4990,
+                    "6": 6490,
+                    "8": 7990,
+                    "10": 9490,
+                    "12": 11990
+                },
+                "3": {
+                    "4": 4990,
+                    "6": 6490,
+                    "8": 7990,
+                    "10": 9490,
+                    "12": 11990
+                },
+                "3.5": {
+                    "4": 5990,
+                    "6": 7990,
+                    "8": 9990,
+                    "10": 11990,
+                    "12": 13990
+                }
+            },
+            "Домиком": {
+                "2.5": {
+                    "4": 5990,
+                    "6": 7990,
+                    "8": 9990,
+                    "10": 11990,
+                    "12": 13990
+                },
+                "3": {
+                    "4": 5990,
+                    "6": 7990,
+                    "8": 9990,
+                    "10": 11990,
+                    "12": 13990
+                },
+                "3.5": {
+                    "4": 5990,
+                    "6": 7990,
+                    "8": 9990,
+                    "10": 11990,
+                    "12": 13990
+                },
+                "4": {
+                    "4": 7990,
+                    "6": 11490,
+                    "8": 14990,
+                    "10": 18490,
+                    "12": 22490
+                }
+            }
+        };
+
+        // Обновление опций каркаса
+        function updateFrameOptions() {
+            const typeSelect = document.getElementById("type");
+            const frameSelect = document.getElementById("frame");
+            const selectedType = typeSelect.options[typeSelect.selectedIndex].text;
+
+            // Очищаем текущие опции
+            frameSelect.innerHTML = "";
+
+            // Добавляем новые опции
+            frameOptions[selectedType].forEach(option => {
+                const newOption = document.createElement("option");
+                newOption.value = option.value;
+                newOption.text = option.label;
+                frameSelect.add(newOption);
+            });
+        }
+
+        // Инициализация каркаса при загрузке страницы
+        updateFrameOptions();
+
+        // Функция для добавления дополнительных товаров
+        function addProduct() {
+            const productsList = document.getElementById("products-list");
+            const productDiv = document.createElement("div");
+            productDiv.className = "product";
+
+            const productSelect = document.createElement("select");
+            productSelect.innerHTML = `
+                <option value="drip_mech">Капельный полив механический</option>
+                <option value="drip_auto">Капельный полив автоматический</option>
+                <option value="window_auto">Автомат для форточки</option>
+                <option value="tape_steam">Паропропускающая лента</option>
+                <option value="tape_zinc">Оцинкованная лента</option>
+                <option value="extra_window">Дополнительная форточка</option>
+            `;
+
+            const quantityInput = document.createElement("input");
+            quantityInput.type = "number";
+            quantityInput.min = "0";
+            quantityInput.placeholder = "Количество";
+
+            const removeButton = document.createElement("button");
+            removeButton.className = "remove-btn";
+            removeButton.innerHTML = '<i class="fas fa-trash"></i>'; // Иконка корзинки
+            removeButton.onclick = () => productDiv.remove();
+
+            productDiv.appendChild(productSelect);
+            productDiv.appendChild(quantityInput);
+            productDiv.appendChild(removeButton);
+            productsList.appendChild(productDiv);
+        }
+
+        // Функция для расчёта стоимости
+        function calculate() {
+            const type = document.getElementById("type").options[document.getElementById("type").selectedIndex].text;
+            const width = document.getElementById("width").value;
+            const length = document.getElementById("length").value;
+            const frame = document.getElementById("frame").options[document.getElementById("frame").selectedIndex].text;
+            const polycarbonate = document.getElementById("polycarbonate").options[document.getElementById("polycarbonate").selectedIndex].text;
+            const arcStep = document.getElementById("arc-step").value || "1 м";
+            const foundation = document.getElementById("foundation").options[document.getElementById("foundation").selectedIndex].text;
+            const assembly = document.getElementById("assembly").value === "1" ? "С нашей сборкой" : "Без сборки";
+            const deliveryDistance = parseFloat(document.getElementById("delivery").value) || 0;
+
+            // Рассчитываем стоимость сборки
+            let assemblyCostValue = 0;
+            if (assembly === "С нашей сборкой") {
+                assemblyCostValue = assemblyCost[type][width][length];
+            }
+
+            // Рассчитываем стоимость доставки
+            let deliveryCost = 0;
+            if (assembly === "С нашей сборкой") {
+                deliveryCost = Math.max(1000, 40 * deliveryDistance);
+            } else {
+                deliveryCost = Math.max(1000, 40 * deliveryDistance + 500);
+            }
+
+            // Рассчитываем общую стоимость
+            const totalCost = parseFloat(document.getElementById('type').value) +
+                (width * length * parseFloat(document.getElementById('frame').value)) +
+                (width * length * parseFloat(document.getElementById('polycarbonate').value)) +
+                parseFloat(document.getElementById('foundation').value) +
+                assemblyCostValue +
+                deliveryCost;
+
+            // Обновляем блок "Общая стоимость"
+            document.getElementById("result").innerText = `Общая стоимость: ${totalCost.toFixed(2)} руб`;
+        }
+
+        // Функция для отображения итогового расчёта при нажатии на "Общая стоимость"
+        function showCalculation() {
+            const type = document.getElementById("type").options[document.getElementById("type").selectedIndex].text;
+            const width = document.getElementById("width").value;
+            const length = document.getElementById("length").value;
+            const frame = document.getElementById("frame").options[document.getElementById("frame").selectedIndex].text;
+            const polycarbonate = document.getElementById("polycarbonate").options[document.getElementById("polycarbonate").selectedIndex].text;
+            const arcStep = document.getElementById("arc-step").value || "1 м";
+            const foundation = document.getElementById("foundation").options[document.getElementById("foundation").selectedIndex].text;
+            const assembly = document.getElementById("assembly").value === "1" ? "С нашей сборкой" : "Без сборки";
+            const deliveryDistance = parseFloat(document.getElementById("delivery").value) || 0;
+
+            // Получаем высоту теплицы
+            const height = heightOptions[type][width];
+
+            // Получаем снеговую нагрузку
+            let snowLoadValue = "";
+            if (type === "Арочная" && frame === "40х20 + 20х20") {
+                snowLoadValue = snowLoad[type][frame][width];
+            } else {
+                snowLoadValue = snowLoad[type][frame] || "Не указано";
+            }
+
+            // Получаем количество стяжек
+            const tiesCountValue = tiesCount[type][width];
+
+            // Формируем текст для всплывающего сообщения
+            const popupContent = `
+                Тип теплицы: ${type}
+                ☀️ Поликарбонат с защитой от ультрафиолета UV-400
+                ⚙️ Цельногнутые дуги из стальной замкнутой трубы
+                ⚙️ Каркас из оцинкованной внутри и снаружи стали (полностью защита от ржавчины и коррозии)
+                ⚙️ Краб-система на 4 болтах
+                ❄️ Не требует подпорок на зиму
+                ✏️ Гарантия 15 лет!!!
+                -----------------
+                Каркас: ${frame}
+                Шаг дуги: ${arcStep}
+                Поликарбонат: ${polycarbonate} с защитой от ультрафиолета
+                Размеры (ШхДхВ): ${width} x ${length} x ${height}
+                Снеговая нагрузка: ${snowLoadValue}
+                Количество стяжек: ${tiesCountValue}
+                Комплектация: 2 двери, 2 форточки
+                Фундамент: ${foundation}
+                Сборка: ${assembly}
+                Доставка: ${deliveryDistance} км
+                -----------------
+                Стоимость со скидкой до ${getDiscountDate()}: ${document.getElementById("result").innerText}
+                (в стоимость включены: чек, каркас на краб-системе, поликарбонат, инструкция по сборке)
+            `;
+
+            // Отображаем всплывающее сообщение
+            document.getElementById("popup-content").innerText = popupContent;
+            document.getElementById("overlay").style.display = "block";
+            document.getElementById("popup").style.display = "block";
+        }
+
+        // Функция для получения даты скидки (текущая дата + 7 дней)
+        function getDiscountDate() {
+            const date = new Date();
+            date.setDate(date.getDate() + 7);
+            return date.toLocaleDateString("ru-RU");
+        }
+
+        // Копирование текста в буфер обмена
+        function copyToClipboard() {
+            const text = document.getElementById("popup-content").innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Текст скопирован!");
+            });
+        }
+
+        // Закрытие всплывающего сообщения при клике на оверлей
+        document.getElementById("overlay").addEventListener("click", () => {
+            document.getElementById("overlay").style.display = "none";
+            document.getElementById("popup").style.display = "none";
+        });
+    </script>
+</body>
+</html>
