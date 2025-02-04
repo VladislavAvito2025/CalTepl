@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Для Safari -->
-    <meta name="mobile-web-app-capable" content="yes"> <!-- Для Chrome -->
     <title>Калькулятор стоимости теплицы</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -280,24 +278,6 @@
         .additional-products .add-product-btn:hover {
             background: #0056b3;
         }
-
-        /* Стили для кнопки полноэкранного режима */
-        .fullscreen-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px;
-            background: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 1000;
-        }
-
-        .fullscreen-btn:hover {
-            background: #0056b3;
-        }
     </style>
 </head>
 <body>
@@ -396,36 +376,285 @@
         <button class="copy-btn" onclick="copyToClipboard()">Скопировать</button>
     </div>
 
-    <!-- Кнопка для перехода в полноэкранный режим -->
-    <button class="fullscreen-btn" onclick="expand()">Полный экран</button>
-
     <script>
-        // Функция для перехода в полноэкранный режим
-        function expand() {
-            const elem = document.documentElement; // Получаем корневой элемент страницы
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.mozRequestFullScreen) { // Firefox
-                elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari и Opera
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { // IE/Edge
-                elem.msRequestFullscreen();
+        // Инициализация данных
+        const frameOptions = {
+            "Арочная": [
+                { value: 300, label: "20х20" },
+                { value: 400, label: "40х20" },
+                { value: 500, label: "20х20 + 20х20" },
+                { value: 600, label: "40х20 + 20х20" }
+            ],
+            "Прямостенная": [
+                { value: 400, label: "40х20" },
+                { value: 600, label: "40х20 + 20х20" }
+            ],
+            "Каплевидная": [
+                { value: 400, label: "40х20" }
+            ],
+            "Домиком": [
+                { value: 400, label: "40х20" },
+                { value: 600, label: "40х20 + 20х20" }
+            ]
+        };
+
+        const heightOptions = {
+            "Арочная": { "2.5": "2.1 м", "3": "2.1 м", "3.5": "2.1 м", "4": "2.8 м" },
+            "Прямостенная": { "2.5": "2.1 м", "3": "2.1 м", "3.5": "2.1 м", "4": "2.8 м" },
+            "Каплевидная": { "2.5": "2.4 м", "3": "2.4 м", "3.5": "2.8 м" },
+            "Домиком": { "2.5": "2.2 м", "3": "2.3 м", "3.5": "2.8 м", "4": "2.8 м" }
+        };
+
+        const snowLoad = {
+            "Арочная": {
+                "20х20": "227 кг/м²",
+                "40х20": "272 кг/м²",
+                "20х20 + 20х20": "314 кг/м²",
+                "40х20 + 20х20": {
+                    "2.5": "825 кг/м²",
+                    "3": "825 кг/м²",
+                    "3.5": "825 кг/м²",
+                    "4": "931 кг/м²"
+                }
+            },
+            "Каплевидная": { "40х20": "492 кг/м²" },
+            "Домиком": {
+                "40х20": "483 кг/м²",
+                "40х20 + 20х20": {
+                    "2.5": "1142 кг/м²",
+                    "3": "1142 кг/м²",
+                    "3.5": "1142 кг/м²",
+                    "4": "1328 кг/м²"
+                }
+            },
+            "Прямостенная": {
+                "40х20": "284 кг/м²",
+                "40х20 + 20х20": "838 кг/м²"
             }
+        };
+
+        const tiesCount = {
+            "Арочная": { "2.5": "5 шт", "3": "5 шт", "3.5": "5 шт", "4": "9 шт" },
+            "Прямостенная": { "2.5": "7 шт", "3": "7 шт", "3.5": "7 шт", "4": "9 шт" },
+            "Каплевидная": { "2.5": "6 шт", "3": "6 шт", "3.5": "8 шт" },
+            "Домиком": { "2.5": "6 шт", "3": "6 шт", "3.5": "8 шт", "4": "8 шт" }
+        };
+
+        const assemblyCost = {
+            "Арочная": {
+                "2.5": { "4": 4990, "6": 6490, "8": 7990, "10": 9490, "12": 11990 },
+                "3": { "4": 4990, "6": 6490, "8": 7990, "10": 9490, "12": 11990 },
+                "3.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "4": { "4": 7990, "6": 11490, "8": 14990, "10": 18490, "12": 22490 }
+            },
+            "Прямостенная": {
+                "2.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "3": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "3.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "4": { "4": 7990, "6": 11490, "8": 14990, "10": 18490, "12": 22490 }
+            },
+            "Каплевидная": {
+                "2.5": { "4": 4990, "6": 6490, "8": 7990, "10": 9490, "12": 11990 },
+                "3": { "4": 4990, "6": 6490, "8": 7990, "10": 9490, "12": 11990 },
+                "3.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 }
+            },
+            "Домиком": {
+                "2.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "3": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "3.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "4": { "4": 7990, "6": 11490, "8": 14990, "10": 18490, "12": 22490 }
+            }
+        };
+
+        const productPrices = {
+            "drip_mech": 1000,
+            "drip_auto": 1500,
+            "window_auto": 2000,
+            "tape_steam": 500,
+            "tape_zinc": 700,
+            "extra_window": 1200
+        };
+
+        // Обновление опций каркаса
+        function updateFrameOptions() {
+            const typeSelect = document.getElementById("type");
+            const frameSelect = document.getElementById("frame");
+            const selectedType = typeSelect.options[typeSelect.selectedIndex].text;
+
+            frameSelect.innerHTML = "";
+            frameOptions[selectedType].forEach(option => {
+                const newOption = document.createElement("option");
+                newOption.value = option.value;
+                newOption.text = option.label;
+                frameSelect.add(newOption);
+            });
         }
 
-        // Автоматически переходим в полноэкранный режим при загрузке страницы
+        // Добавление дополнительного товара
+        function addProduct() {
+            const productsList = document.getElementById("products-list");
+            const productDiv = document.createElement("div");
+            productDiv.className = "product";
+
+            const productSelect = document.createElement("select");
+            productSelect.innerHTML = `
+                <option value="drip_mech">Капельный полив механический</option>
+                <option value="drip_auto">Капельный полив автоматический</option>
+                <option value="window_auto">Автомат для форточки</option>
+                <option value="tape_steam">Паропропускающая лента</option>
+                <option value="tape_zinc">Оцинкованная лента</option>
+                <option value="extra_window">Дополнительная форточка</option>
+            `;
+
+            const quantityInput = document.createElement("input");
+            quantityInput.type = "number";
+            quantityInput.min = "0";
+            quantityInput.placeholder = "Количество";
+
+            const removeButton = document.createElement("button");
+            removeButton.className = "remove-btn";
+            removeButton.innerHTML = '<i class="fas fa-trash"></i>';
+            removeButton.onclick = () => productDiv.remove();
+
+            productDiv.appendChild(productSelect);
+            productDiv.appendChild(quantityInput);
+            productDiv.appendChild(removeButton);
+            productsList.appendChild(productDiv);
+        }
+
+        // Расчет стоимости
+        function calculate() {
+            const type = getSelectedText("type");
+            const width = getSelectedValue("width");
+            const length = getSelectedValue("length");
+            const frame = getSelectedValue("frame");
+            const polycarbonate = getSelectedValue("polycarbonate");
+            const arcStep = getSelectedValue("arc-step");
+            const foundation = getSelectedValue("foundation");
+            const assembly = document.getElementById("assembly").value === "1" ? "С нашей сборкой" : "Без сборки";
+            const deliveryDistance = parseFloat(document.getElementById("delivery").value) || 0;
+
+            // Стоимость сборки
+            let assemblyCostValue = 0;
+            if (assembly === "С нашей сборкой") {
+                assemblyCostValue = assemblyCost[type][width][length];
+            }
+
+            // Стоимость доставки
+            let deliveryCost = 0;
+            if (assembly === "С нашей сборкой") {
+                deliveryCost = Math.max(1000, 40 * deliveryDistance);
+            } else {
+                deliveryCost = Math.max(1000, 40 * deliveryDistance + 500);
+            }
+
+            // Стоимость дополнительных товаров
+            let additionalProductsCost = 0;
+            const products = document.querySelectorAll("#products-list .product");
+            products.forEach(product => {
+                const quantity = parseFloat(product.querySelector("input").value) || 0;
+                const price = productPrices[product.querySelector("select").value] || 0;
+                additionalProductsCost += quantity * price;
+            });
+
+            // Общая стоимость
+            const totalCost = parseFloat(document.getElementById('type').value) +
+                (width * length * parseFloat(frame)) +
+                (width * length * parseFloat(polycarbonate)) +
+                parseFloat(foundation) +
+                assemblyCostValue +
+                deliveryCost +
+                additionalProductsCost;
+
+            // Обновление результата
+            document.getElementById("result").innerText = `Общая стоимость: ${totalCost.toFixed(2)} руб`;
+        }
+
+        // Отображение деталей расчета
+        function showCalculation() {
+            const type = getSelectedText("type");
+            const width = getSelectedValue("width");
+            const length = getSelectedValue("length");
+            const frame = getSelectedText("frame");
+            const polycarbonate = getSelectedText("polycarbonate");
+            const arcStep = getSelectedValue("arc-step");
+            const foundation = getSelectedText("foundation");
+            const assembly = document.getElementById("assembly").value === "1" ? "С нашей сборкой" : "Без сборки";
+            const deliveryDistance = parseFloat(document.getElementById("delivery").value) || 0;
+
+            const height = heightOptions[type][width];
+            const snowLoadValue = frame === "40х20 + 20х20" ? snowLoad[type][frame][width] : snowLoad[type][frame] || "Не указано";
+            const tiesCountValue = tiesCount[type][width];
+
+            const popupContent = `
+                Тип теплицы: ${type}
+                ☀️ Поликарбонат с защитой от ультрафиолета UV-400
+                ⚙️ Цельногнутые дуги из стальной замкнутой трубы
+                ⚙️ Каркас из оцинкованной внутри и снаружи стали (полностью защита от ржавчины и коррозии)
+                ⚙️ Краб-система на 4 болтах
+                ❄️ Не требует подпорок на зиму
+                ✏️ Гарантия 15 лет!!!
+                -----------------
+                Каркас: ${frame}
+                Шаг дуги: ${arcStep}
+                Поликарбонат: ${polycarbonate} с защитой от ультрафиолета
+                Размеры (ШхДхВ): ${width} x ${length} x ${height}
+                Снеговая нагрузка: ${snowLoadValue}
+                Количество стяжек: ${tiesCountValue}
+                Комплектация: 2 двери, 2 форточки
+                Фундамент: ${foundation}
+                Сборка: ${assembly}
+                Доставка: ${deliveryDistance} км
+                -----------------
+                Стоимость со скидкой до ${getDiscountDate()}: ${document.getElementById("result").innerText}
+                (в стоимость включены: чек, каркас на краб-системе, поликарбонат, инструкция по сборке)
+            `;
+
+            document.getElementById("popup-content").innerText = popupContent;
+            document.getElementById("overlay").style.display = "block";
+            document.getElementById("popup").style.display = "block";
+        }
+
+        // Получение текста выбранного элемента
+        function getSelectedText(id) {
+            return document.getElementById(id).options[document.getElementById(id).selectedIndex].text;
+        }
+
+        // Получение значения выбранного элемента
+        function getSelectedValue(id) {
+            return parseFloat(document.getElementById(id).value);
+        }
+
+        // Получение даты скидки
+        function getDiscountDate() {
+            const date = new Date();
+            date.setDate(date.getDate() + 7);
+            return date.toLocaleDateString("ru-RU");
+        }
+
+        // Копирование текста в буфер обмена
+        function copyToClipboard() {
+            const text = document.getElementById("popup-content").innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Текст скопирован!");
+            });
+        }
+
+        // Закрытие всплывающего окна
+        document.getElementById("overlay").addEventListener("click", () => {
+            document.getElementById("overlay").style.display = "none";
+            document.getElementById("popup").style.display = "none";
+        });
+
+        // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
-            expand(); // Переход в полноэкранный режим
-            updateFrameOptions(); // Инициализация каркаса
+            updateFrameOptions();
             document.getElementById("delivery").addEventListener("input", () => {
                 if (document.getElementById("delivery").value < 0) {
                     document.getElementById("delivery").value = 0;
                 }
             });
         });
-
-        // Остальной JavaScript код остается без изменений
     </script>
 </body>
 </html>
