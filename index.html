@@ -243,7 +243,6 @@
             font-size: 1em;
         }
 
-        /* Стили для кнопки удаления */
         .additional-products .product .remove-btn {
             padding: 8px;
             background: #ff4d4d;
@@ -376,21 +375,9 @@
         </div>
         <button class="copy-btn" onclick="copyToClipboard()">Скопировать</button>
     </div>
-    <script src="scripts.min.js"></script> <!-- Локальный минимизированный JavaScript -->
-    <script>
-        // Инициализация и обработчики событий
-        document.addEventListener('DOMContentLoaded', () => {
-            updateFrameOptions();
-            document.getElementById('overlay').addEventListener('click', () => {
-                document.getElementById('overlay').style.display = 'none';
-                document.getElementById('popup').style.display = 'none';
-            });
-        });
 
-        // Остальная часть JavaScript кода остается без изменений
-    </script>
     <script>
-        // Каркасы для каждого типа теплицы
+        // Инициализация данных
         const frameOptions = {
             "Арочная": [
                 { value: 300, label: "20х20" },
@@ -411,34 +398,13 @@
             ]
         };
 
-        // Высота теплицы в зависимости от типа и ширины
         const heightOptions = {
-            "Арочная": {
-                "2.5": "2.1 м",
-                "3": "2.1 м",
-                "3.5": "2.1 м",
-                "4": "2.8 м"
-            },
-            "Прямостенная": {
-                "2.5": "2.1 м",
-                "3": "2.1 м",
-                "3.5": "2.1 м",
-                "4": "2.8 м"
-            },
-            "Каплевидная": {
-                "2.5": "2.4 м",
-                "3": "2.4 м",
-                "3.5": "2.8 м"
-            },
-            "Домиком": {
-                "2.5": "2.2 м",
-                "3": "2.3 м",
-                "3.5": "2.8 м",
-                "4": "2.8 м"
-            }
+            "Арочная": { "2.5": "2.1 м", "3": "2.1 м", "3.5": "2.1 м", "4": "2.8 м" },
+            "Прямостенная": { "2.5": "2.1 м", "3": "2.1 м", "3.5": "2.1 м", "4": "2.8 м" },
+            "Каплевидная": { "2.5": "2.4 м", "3": "2.4 м", "3.5": "2.8 м" },
+            "Домиком": { "2.5": "2.2 м", "3": "2.3 м", "3.5": "2.8 м", "4": "2.8 м" }
         };
 
-        // Снеговая нагрузка в зависимости от типа, каркаса и ширины
         const snowLoad = {
             "Арочная": {
                 "20х20": "227 кг/м²",
@@ -451,9 +417,7 @@
                     "4": "931 кг/м²"
                 }
             },
-            "Каплевидная": {
-                "40х20": "492 кг/м²"
-            },
+            "Каплевидная": { "40х20": "492 кг/м²" },
             "Домиком": {
                 "40х20": "483 кг/м²",
                 "40х20 + 20х20": {
@@ -469,148 +433,46 @@
             }
         };
 
-        // Количество стяжек в зависимости от типа и ширины
         const tiesCount = {
+            "Арочная": { "2.5": "5 шт", "3": "5 шт", "3.5": "5 шт", "4": "9 шт" },
+            "Прямостенная": { "2.5": "7 шт", "3": "7 шт", "3.5": "7 шт", "4": "9 шт" },
+            "Каплевидная": { "2.5": "6 шт", "3": "6 шт", "3.5": "8 шт" },
+            "Домиком": { "2.5": "6 шт", "3": "6 шт", "3.5": "8 шт", "4": "8 шт" }
+        };
+
+        const assemblyCost = {
             "Арочная": {
-                "2.5": "5 шт",
-                "3": "5 шт",
-                "3.5": "5 шт",
-                "4": "9 шт"
+                "2.5": { "4": 4990, "6": 6490, "8": 7990, "10": 9490, "12": 11990 },
+                "3": { "4": 4990, "6": 6490, "8": 7990, "10": 9490, "12": 11990 },
+                "3.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "4": { "4": 7990, "6": 11490, "8": 14990, "10": 18490, "12": 22490 }
             },
             "Прямостенная": {
-                "2.5": "7 шт",
-                "3": "7 шт",
-                "3.5": "7 шт",
-                "4": "9 шт"
+                "2.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "3": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "3.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "4": { "4": 7990, "6": 11490, "8": 14990, "10": 18490, "12": 22490 }
             },
             "Каплевидная": {
-                "2.5": "6 шт",
-                "3": "6 шт",
-                "3.5": "8 шт"
+                "2.5": { "4": 4990, "6": 6490, "8": 7990, "10": 9490, "12": 11990 },
+                "3": { "4": 4990, "6": 6490, "8": 7990, "10": 9490, "12": 11990 },
+                "3.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 }
             },
             "Домиком": {
-                "2.5": "6 шт",
-                "3": "6 шт",
-                "3.5": "8 шт",
-                "4": "8 шт"
+                "2.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "3": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "3.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
+                "4": { "4": 7990, "6": 11490, "8": 14990, "10": 18490, "12": 22490 }
             }
         };
 
-        // Стоимость сборки в зависимости от типа, ширины и длины
-        const assemblyCost = {
-            "Арочная": {
-                "2.5": {
-                    "4": 4990,
-                    "6": 6490,
-                    "8": 7990,
-                    "10": 9490,
-                    "12": 11990
-                },
-                "3": {
-                    "4": 4990,
-                    "6": 6490,
-                    "8": 7990,
-                    "10": 9490,
-                    "12": 11990
-                },
-                "3.5": {
-                    "4": 5990,
-                    "6": 7990,
-                    "8": 9990,
-                    "10": 11990,
-                    "12": 13990
-                },
-                "4": {
-                    "4": 7990,
-                    "6": 11490,
-                    "8": 14990,
-                    "10": 18490,
-                    "12": 22490
-                }
-            },
-            "Прямостенная": {
-                "2.5": {
-                    "4": 5990,
-                    "6": 7990,
-                    "8": 9990,
-                    "10": 11990,
-                    "12": 13990
-                },
-                "3": {
-                    "4": 5990,
-                    "6": 7990,
-                    "8": 9990,
-                    "10": 11990,
-                    "12": 13990
-                },
-                "3.5": {
-                    "4": 5990,
-                    "6": 7990,
-                    "8": 9990,
-                    "10": 11990,
-                    "12": 13990
-                },
-                "4": {
-                    "4": 7990,
-                    "6": 11490,
-                    "8": 14990,
-                    "10": 18490,
-                    "12": 22490
-                }
-            },
-            "Каплевидная": {
-                "2.5": {
-                    "4": 4990,
-                    "6": 6490,
-                    "8": 7990,
-                    "10": 9490,
-                    "12": 11990
-                },
-                "3": {
-                    "4": 4990,
-                    "6": 6490,
-                    "8": 7990,
-                    "10": 9490,
-                    "12": 11990
-                },
-                "3.5": {
-                    "4": 5990,
-                    "6": 7990,
-                    "8": 9990,
-                    "10": 11990,
-                    "12": 13990
-                }
-            },
-            "Домиком": {
-                "2.5": {
-                    "4": 5990,
-                    "6": 7990,
-                    "8": 9990,
-                    "10": 11990,
-                    "12": 13990
-                },
-                "3": {
-                    "4": 5990,
-                    "6": 7990,
-                    "8": 9990,
-                    "10": 11990,
-                    "12": 13990
-                },
-                "3.5": {
-                    "4": 5990,
-                    "6": 7990,
-                    "8": 9990,
-                    "10": 11990,
-                    "12": 13990
-                },
-                "4": {
-                    "4": 7990,
-                    "6": 11490,
-                    "8": 14990,
-                    "10": 18490,
-                    "12": 22490
-                }
-            }
+        const productPrices = {
+            "drip_mech": 1000,
+            "drip_auto": 1500,
+            "window_auto": 2000,
+            "tape_steam": 500,
+            "tape_zinc": 700,
+            "extra_window": 1200
         };
 
         // Обновление опций каркаса
@@ -619,10 +481,7 @@
             const frameSelect = document.getElementById("frame");
             const selectedType = typeSelect.options[typeSelect.selectedIndex].text;
 
-            // Очищаем текущие опции
             frameSelect.innerHTML = "";
-
-            // Добавляем новые опции
             frameOptions[selectedType].forEach(option => {
                 const newOption = document.createElement("option");
                 newOption.value = option.value;
@@ -631,10 +490,7 @@
             });
         }
 
-        // Инициализация каркаса при загрузке страницы
-        updateFrameOptions();
-
-        // Функция для добавления дополнительных товаров
+        // Добавление дополнительного товара
         function addProduct() {
             const productsList = document.getElementById("products-list");
             const productDiv = document.createElement("div");
@@ -657,7 +513,7 @@
 
             const removeButton = document.createElement("button");
             removeButton.className = "remove-btn";
-            removeButton.innerHTML = '<i class="fas fa-trash"></i>'; // Иконка корзинки
+            removeButton.innerHTML = '<i class="fas fa-trash"></i>';
             removeButton.onclick = () => productDiv.remove();
 
             productDiv.appendChild(productSelect);
@@ -666,25 +522,25 @@
             productsList.appendChild(productDiv);
         }
 
-        // Функция для расчёта стоимости
+        // Расчет стоимости
         function calculate() {
-            const type = document.getElementById("type").options[document.getElementById("type").selectedIndex].text;
-            const width = document.getElementById("width").value;
-            const length = document.getElementById("length").value;
-            const frame = document.getElementById("frame").options[document.getElementById("frame").selectedIndex].text;
-            const polycarbonate = document.getElementById("polycarbonate").options[document.getElementById("polycarbonate").selectedIndex].text;
-            const arcStep = document.getElementById("arc-step").value || "1 м";
-            const foundation = document.getElementById("foundation").options[document.getElementById("foundation").selectedIndex].text;
+            const type = getSelectedText("type");
+            const width = getSelectedValue("width");
+            const length = getSelectedValue("length");
+            const frame = getSelectedValue("frame");
+            const polycarbonate = getSelectedValue("polycarbonate");
+            const arcStep = getSelectedValue("arc-step");
+            const foundation = getSelectedValue("foundation");
             const assembly = document.getElementById("assembly").value === "1" ? "С нашей сборкой" : "Без сборки";
             const deliveryDistance = parseFloat(document.getElementById("delivery").value) || 0;
 
-            // Рассчитываем стоимость сборки
+            // Стоимость сборки
             let assemblyCostValue = 0;
             if (assembly === "С нашей сборкой") {
                 assemblyCostValue = assemblyCost[type][width][length];
             }
 
-            // Рассчитываем стоимость доставки
+            // Стоимость доставки
             let deliveryCost = 0;
             if (assembly === "С нашей сборкой") {
                 deliveryCost = Math.max(1000, 40 * deliveryDistance);
@@ -692,45 +548,44 @@
                 deliveryCost = Math.max(1000, 40 * deliveryDistance + 500);
             }
 
-            // Рассчитываем общую стоимость
-            const totalCost = parseFloat(document.getElementById('type').value) +
-                (width * length * parseFloat(document.getElementById('frame').value)) +
-                (width * length * parseFloat(document.getElementById('polycarbonate').value)) +
-                parseFloat(document.getElementById('foundation').value) +
-                assemblyCostValue +
-                deliveryCost;
+            // Стоимость дополнительных товаров
+            let additionalProductsCost = 0;
+            const products = document.querySelectorAll("#products-list .product");
+            products.forEach(product => {
+                const quantity = parseFloat(product.querySelector("input").value) || 0;
+                const price = productPrices[product.querySelector("select").value] || 0;
+                additionalProductsCost += quantity * price;
+            });
 
-            // Обновляем блок "Общая стоимость"
+            // Общая стоимость
+            const totalCost = parseFloat(document.getElementById('type').value) +
+                (width * length * parseFloat(frame)) +
+                (width * length * parseFloat(polycarbonate)) +
+                parseFloat(foundation) +
+                assemblyCostValue +
+                deliveryCost +
+                additionalProductsCost;
+
+            // Обновление результата
             document.getElementById("result").innerText = `Общая стоимость: ${totalCost.toFixed(2)} руб`;
         }
 
-        // Функция для отображения итогового расчёта при нажатии на "Общая стоимость"
+        // Отображение деталей расчета
         function showCalculation() {
-            const type = document.getElementById("type").options[document.getElementById("type").selectedIndex].text;
-            const width = document.getElementById("width").value;
-            const length = document.getElementById("length").value;
-            const frame = document.getElementById("frame").options[document.getElementById("frame").selectedIndex].text;
-            const polycarbonate = document.getElementById("polycarbonate").options[document.getElementById("polycarbonate").selectedIndex].text;
-            const arcStep = document.getElementById("arc-step").value || "1 м";
-            const foundation = document.getElementById("foundation").options[document.getElementById("foundation").selectedIndex].text;
+            const type = getSelectedText("type");
+            const width = getSelectedValue("width");
+            const length = getSelectedValue("length");
+            const frame = getSelectedText("frame");
+            const polycarbonate = getSelectedText("polycarbonate");
+            const arcStep = getSelectedValue("arc-step");
+            const foundation = getSelectedText("foundation");
             const assembly = document.getElementById("assembly").value === "1" ? "С нашей сборкой" : "Без сборки";
             const deliveryDistance = parseFloat(document.getElementById("delivery").value) || 0;
 
-            // Получаем высоту теплицы
             const height = heightOptions[type][width];
-
-            // Получаем снеговую нагрузку
-            let snowLoadValue = "";
-            if (type === "Арочная" && frame === "40х20 + 20х20") {
-                snowLoadValue = snowLoad[type][frame][width];
-            } else {
-                snowLoadValue = snowLoad[type][frame] || "Не указано";
-            }
-
-            // Получаем количество стяжек
+            const snowLoadValue = frame === "40х20 + 20х20" ? snowLoad[type][frame][width] : snowLoad[type][frame] || "Не указано";
             const tiesCountValue = tiesCount[type][width];
 
-            // Формируем текст для всплывающего сообщения
             const popupContent = `
                 Тип теплицы: ${type}
                 ☀️ Поликарбонат с защитой от ультрафиолета UV-400
@@ -755,13 +610,22 @@
                 (в стоимость включены: чек, каркас на краб-системе, поликарбонат, инструкция по сборке)
             `;
 
-            // Отображаем всплывающее сообщение
             document.getElementById("popup-content").innerText = popupContent;
             document.getElementById("overlay").style.display = "block";
             document.getElementById("popup").style.display = "block";
         }
 
-        // Функция для получения даты скидки (текущая дата + 7 дней)
+        // Получение текста выбранного элемента
+        function getSelectedText(id) {
+            return document.getElementById(id).options[document.getElementById(id).selectedIndex].text;
+        }
+
+        // Получение значения выбранного элемента
+        function getSelectedValue(id) {
+            return parseFloat(document.getElementById(id).value);
+        }
+
+        // Получение даты скидки
         function getDiscountDate() {
             const date = new Date();
             date.setDate(date.getDate() + 7);
@@ -776,10 +640,20 @@
             });
         }
 
-        // Закрытие всплывающего сообщения при клике на оверлей
+        // Закрытие всплывающего окна
         document.getElementById("overlay").addEventListener("click", () => {
             document.getElementById("overlay").style.display = "none";
             document.getElementById("popup").style.display = "none";
+        });
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            updateFrameOptions();
+            document.getElementById("delivery").addEventListener("input", () => {
+                if (document.getElementById("delivery").value < 0) {
+                    document.getElementById("delivery").value = 0;
+                }
+            });
         });
     </script>
 </body>
