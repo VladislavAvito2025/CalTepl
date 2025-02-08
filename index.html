@@ -172,10 +172,49 @@
         .modal-content .copy-btn:hover {
             background: #0056b3;
         }
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .password-modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 300px;
+            width: 100%;
+            position: relative;
+            text-align: center;
+        }
+        .password-modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .password-modal-content button {
+            width: 100%;
+            padding: 10px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .password-modal-content button:hover {
+            background: #0056b3;
+        }
     </style>
 </head>
 <body>
-    <div class="container" id="mainContent">
+    <div class="container" id="mainContent" style="display: none;">
         <h2>Конфигуратор теплиц</h2>
         <form id="greenhouseConfigurator">
             <label for="type">Тип теплицы:</label>
@@ -244,7 +283,16 @@
         <div class="price" id="totalPrice" onclick="showModal()">Итоговая стоимость: 0 руб</div>
     </div>
 
-    <!-- Модальное окно -->
+    <!-- Модальное окно для пароля -->
+    <div class="password-modal" id="passwordModal">
+        <div class="password-modal-content">
+            <h3>Введите пароль</h3>
+            <input type="password" id="passwordInput" placeholder="Пароль">
+            <button onclick="checkPassword()">Войти</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно для итоговой стоимости -->
     <div class="modal" id="modal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal()">×</button>
@@ -4836,6 +4884,28 @@
         const totalPriceDiv = document.getElementById('totalPrice');
         const modal = document.getElementById('modal');
         const modalText = document.getElementById('modalText');
+        const passwordModal = document.getElementById('passwordModal');
+        const passwordInput = document.getElementById('passwordInput');
+
+        // Проверка авторизации
+        const isAuthenticated = localStorage.getItem('authenticated') === 'true';
+
+        if (!isAuthenticated) {
+            passwordModal.style.display = 'flex'; // Показываем модальное окно с паролем
+        } else {
+            document.getElementById('mainContent').style.display = 'block'; // Показываем основной контент
+        }
+
+        function checkPassword() {
+            const password = passwordInput.value;
+            if (password === '7788') {
+                localStorage.setItem('authenticated', 'true'); // Сохраняем состояние авторизации
+                passwordModal.style.display = 'none'; // Скрываем модальное окно с паролем
+                document.getElementById('mainContent').style.display = 'block'; // Показываем основной контент
+            } else {
+                alert('Неверный пароль!');
+            }
+        }
 
         function updateWidthOptions() {
             const type = typeSelect.value;
