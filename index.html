@@ -223,13 +223,13 @@
             <select id="foundation" name="foundation">
                 <option value="Брус">Брус</option>
                 <option value="Сваи">Сваи</option>
-                <option value="Без фундамента" selected>Без фундамента</option> <!-- По умолчанию -->
+                <option value="Без фундамента" selected>Без фундамента</option>
             </select>
 
             <label for="assembly">Сборка:</label>
             <select id="assembly" name="assembly">
                 <option value="Наша сборка">Наша сборка</option>
-                <option value="Без сборки" selected>Без сборки</option> <!-- По умолчанию -->
+                <option value="Без сборки" selected>Без сборки</option>
             </select>
 
             <label for="delivery">Доставка (км):</label>
@@ -262,6 +262,12 @@
     </div>
 
     <script>
+        // Telegram Web App API
+        const tg = window.Telegram.WebApp;
+
+        // Расширяем приложение на весь экран
+        tg.expand();
+
         // JSON-данные встроены прямо в код
         const greenhousesData = [
     {
