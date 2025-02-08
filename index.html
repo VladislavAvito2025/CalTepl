@@ -2,143 +2,113 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Калькулятор стоимости теплицы</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конфигуратор теплиц</title>
     <style>
-	/* Добавленные стили для модального окна с паролем */
-        .password-modal {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-        }
-
-        .password-modal-content {
+        body {
+            font-family: Arial, sans-serif;
             background: white;
-            padding: 20px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
- margin-top: 50px; /* Добавляем отступ сверху, чтобы контент не прилипал к верхней границе */
+            padding: 16px;
+            margin: 0;
         }
-
-        .password-modal-content input {
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 24px;
+        }
+        label {
+            font-weight: bold;
+            color: #555;
+            display: block;
+            margin-bottom: 8px;
+        }
+        select, input {
             width: 100%;
-            padding: 5px;
-            margin: 15px 0;
+            padding: 12px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        select:focus, input:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+            background: #fff;
+        }
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, #007BFF, #0056b3);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #0056b3, #003d80);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .price {
+            width: 100%;
+            font-size: 20px;
+            color: #333;
+            text-align: center;
+            padding: 16px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        .additional-products {
+            margin-top: 16px;
+        }
+        .additional-products .product {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .additional-products .product select,
+        .additional-products .product input {
+            flex: 1;
+            padding: 10px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            font-size: 1em;
+            font-size: 16px;
         }
-
-        .password-modal-content button {
-            padding: 10px 20px;
-            background: #007BFF;
+        .additional-products .product .remove-btn {
+            padding: 8px;
+            background: linear-gradient(135deg, #ff4d4d, #cc0000);
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1em;
-        }
-
-        .password-modal-content button:hover {
-            background: #0056b3;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
-            color: #333;
-            margin: 0;
-            padding: 0;
+            font-size: 16px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-            touch-action: none;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: all 0.3s ease;
         }
-
-        .container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 800px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: fadeIn 1s ease-in-out;
+        .additional-products .product .remove-btn:hover {
+            background: linear-gradient(135deg, #cc0000, #990000);
         }
-
-        .logo {
-            text-align: center;
-            font-size: 2em;
-            font-weight: bold;
-            color: #007BFF;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #007BFF;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #555;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #007BFF;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-            outline: none;
-        }
-
-        .form-group input[type="number"] {
-            width: calc(100% - 22px);
-        }
-
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            background: linear-gradient(135deg, #007BFF, #0056b3);
-            color: white;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 1.1em;
-            font-weight: bold;
-            animation: slideUp 0.5s ease-in-out;
-            cursor: pointer;
-        }
-
-        button {
+        .additional-products .add-product-btn {
             width: 100%;
             padding: 12px;
             background: linear-gradient(135deg, #007BFF, #0056b3);
@@ -146,57 +116,14 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            transition: background 0.3s ease, transform 0.2s ease;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
-
-        button:hover {
-            background: linear-gradient(135deg, #0056b3, #003f7f);
-            transform: translateY(-2px);
+        .additional-products .add-product-btn:hover {
+            background: linear-gradient(135deg, #0056b3, #003d80);
         }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            max-width: 90%;
-            width: 400px;
-            text-align: left;
-        }
-
-        .popup-content {
-            font-size: 0.9em;
-            line-height: 1.5;
-        }
-
-        .popup button.copy-btn {
-            margin-top: 10px;
-            padding: 8px 12px;
-            background: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-
-        .popup button.copy-btn:hover {
-            background: #0056b3;
-        }
-
-        .overlay {
+        .modal {
             display: none;
             position: fixed;
             top: 0;
@@ -204,359 +131,4700 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 1.5em;
-            }
-
-            h1 {
-                font-size: 1.2em;
-            }
-
-            .form-group input,
-            .form-group select {
-                padding: 8px;
-                font-size: 0.9em;
-            }
-
-            button {
-                padding: 10px;
-                font-size: 0.9em;
-            }
-
-            .result {
-                font-size: 1em;
-            }
-
-            .popup {
-                width: 90%;
-            }
-        }
-
-        .form-group.param {
-            background-color: #f0f8ff;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .form-group.param label {
-            color: #007BFF;
-        }
-
-        .additional-products {
-            margin-top: 20px;
-        }
-
-        .additional-products .product {
-            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
         }
-
-        .additional-products .product select,
-        .additional-products .product input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ddd;
+        .modal-content {
+            background: white;
+            padding: 20px;
             border-radius: 8px;
-            font-size: 1em;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
         }
-
-        .additional-products .product .remove-btn {
-            padding: 8px;
+        .modal-content .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             background: #ff4d4d;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 32px;
-            height: 32px;
-            transition: background 0.3s ease;
         }
-
-        .additional-products .product .remove-btn:hover {
-            background: #cc0000;
-        }
-
-        .additional-products .add-product-btn {
-            padding: 8px 12px;
+        .modal-content .copy-btn {
+            width: 100%;
             background: #007BFF;
             color: white;
+            padding: 10px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9em;
+            font-size: 16px;
             margin-top: 10px;
-            width: auto;
         }
-
-        .additional-products .add-product-btn:hover {
+        .modal-content .copy-btn:hover {
             background: #0056b3;
         }
     </style>
 </head>
 <body>
-	<!-- Модальное окно для ввода пароля -->
-    <div class="password-modal" id="passwordModal">
-        <div class="password-modal-content">
-            <h2>Введите пароль для входа</h2>
-            <input type="password" id="passwordInput" placeholder="Пароль">
-            <button onclick="checkPassword()">Войти</button>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="logo">ЛУКОМОРЬЕ</div>
-        <h1>Калькулятор стоимости теплицы</h1>
-        <div class="form-group param">
+    <div class="container" id="mainContent">
+        <h2>Конфигуратор теплиц</h2>
+        <form id="greenhouseConfigurator">
             <label for="type">Тип теплицы:</label>
-            <select id="type" onchange="updateFrameOptions()">
-                <option value="5000">Арочная</option>
-                <option value="6000">Прямостенная</option>
-                <option value="7000">Каплевидная</option>
-                <option value="8000">Домиком</option>
+            <select id="type" name="type" onchange="updateWidthOptions()">
+                <option value="Арочная">Арочная</option>
+                <option value="Прямостенная">Прямостенная</option>
+                <option value="Каплевидная">Каплевидная</option>
+                <option value="Домиком">Домиком</option>
             </select>
-        </div>
-        <div class="form-group param">
-            <label for="width">Ширина теплицы (м):</label>
-            <select id="width">
-                <option value="2.5">2.5 м</option>
-                <option value="3">3 м</option>
-                <option value="3.5">3.5 м</option>
-                <option value="4">4 м</option>
-            </select>
-        </div>
-        <div class="form-group param">
-            <label for="length">Длина теплицы (м):</label>
-            <select id="length">
-                <option value="4">4 м</option>
-                <option value="6">6 м</option>
-                <option value="8">8 м</option>
-                <option value="10">10 м</option>
-                <option value="12">12 м</option>
-                <option value="14">14 м</option>
-            </select>
-        </div>
-        <div class="form-group param">
-            <label for="frame">Каркас теплицы:</label>
-            <select id="frame">
+
+            <label for="width">Ширина:</label>
+            <select id="width" name="width" onchange="updateFrameOptions()">
                 <!-- Опции будут обновляться динамически -->
             </select>
-        </div>
-        <div class="form-group param">
-            <label for="polycarbonate">Толщина поликарбоната:</label>
-            <select id="polycarbonate">
-                <option value="200">Поликарбонат Стандарт 4 мм</option>
-                <option value="300">Поликарбонат Люкс 4 мм</option>
-                <option value="400">Поликарбонат Премиум 6 мм</option>
-                <option value="0">Без поликарбоната</option>
+
+            <label for="length">Длина:</label>
+            <select id="length" name="length">
+                <option value="4 м">4 м</option>
+                <option value="6 м">6 м</option>
+                <option value="8 м">8 м</option>
+                <option value="10 м">10 м</option>
+                <option value="12 м">12 м</option>
             </select>
-        </div>
-        <div class="form-group param">
-            <label for="arc-step">Шаг дуги:</label>
-            <select id="arc-step">
+
+            <label for="frame">Каркас:</label>
+            <select id="frame" name="frame">
+                <!-- Опции будут обновляться динамически -->
+            </select>
+
+            <label for="polycarbonate">Тип поликарбоната:</label>
+            <select id="polycarbonate" name="polycarbonate">
+                <option value="Поликарбонат Стандарт 4мм">Поликарбонат Стандарт 4мм</option>
+                <option value="Поликарбонат Люкс 4мм">Поликарбонат Люкс 4мм</option>
+                <option value="Поликарбонат Премиум 6мм">Поликарбонат Премиум 6мм</option>
+                <option value="Без поликарбоната">Без поликарбоната</option>
+            </select>
+
+            <label for="arcStep">Шаг дуги:</label>
+            <select id="arcStep" name="arcStep">
                 <option value="1">1 м</option>
-                <option value="0.65">0.65 м</option>
+                <option value="0.65">0.65 м (+25%)</option>
             </select>
-        </div>
-        <div class="form-group param">
+
             <label for="foundation">Фундамент:</label>
-            <select id="foundation">
-                <option value="0">Без фундамента</option>
-                <option value="5000">Брус</option>
-                <option value="10000">Сваи</option>
+            <select id="foundation" name="foundation">
+                <option value="Брус">Брус</option>
+                <option value="Сваи">Сваи</option>
+                <option value="Без фундамента">Без фундамента</option>
             </select>
-        </div>
-        <div class="form-group param">
+
             <label for="assembly">Сборка:</label>
-            <select id="assembly">
-                <option value="0">Без сборки</option>
-                <option value="1">С нашей сборкой</option>
+            <select id="assembly" name="assembly">
+                <option value="Наша сборка">Наша сборка</option>
+                <option value="Без сборки">Без сборки</option>
             </select>
-        </div>
-        <div class="form-group param">
+
             <label for="delivery">Доставка (км):</label>
-            <input type="number" id="delivery" min="0" placeholder="Введите расстояние">
-        </div>
-        <div class="additional-products">
-            <div class="form-group param">
-                <label>Дополнительные товары:</label>
-                <div id="products-list">
-                    <!-- Сюда будут добавляться товары -->
+            <input type="number" id="delivery" name="delivery" min="0">
+
+            <div class="additional-products">
+                <div class="form-group param">
+                    <label>Дополнительные товары:</label>
+                    <div id="products-list">
+                        <!-- Сюда будут добавляться товары -->
+                    </div>
+                    <button class="add-product-btn" type="button" onclick="addProduct()">+ Добавить товар</button>
                 </div>
-                <button class="add-product-btn" onclick="addProduct()">+ Добавить товар</button>
             </div>
-        </div>
-        <button onclick="calculate()">Рассчитать стоимость</button>
-        <div class="result" id="result" onclick="showCalculation()">Общая стоимость: 0 руб</div>
+
+            <button type="button" onclick="calculatePrice()">Рассчитать стоимость</button>
+        </form>
+        <div class="price" id="totalPrice" onclick="showModal()">Итоговая стоимость: 0 руб</div>
     </div>
 
-    <!-- Всплывающее сообщение -->
-    <div class="overlay" id="overlay"></div>
-    <div class="popup" id="popup">
-        <div class="popup-content" id="popup-content">
-            <!-- Содержимое будет заполнено динамически -->
+    <!-- Модальное окно -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <div id="modalText">
+                <!-- Текст модального окна будет сгенерирован здесь -->
+            </div>
+            <button class="copy-btn" onclick="copyText()">Скопировать текст</button>
         </div>
-        <button class="copy-btn" onclick="copyToClipboard()">Скопировать</button>
     </div>
 
     <script>
-	// Функция для проверки пароля
-        function checkPassword() {
-            const password = document.getElementById("passwordInput").value;
-            if (password === "4455") {
-                document.getElementById("passwordModal").style.display = "none";
-                document.getElementById("mainContent").style.display = "block";
-            } else {
-                alert("Неверный пароль! Попробуйте снова.");
+        // JSON-данные встроены прямо в код
+        const greenhousesData = [
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "11990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "15990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "19990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "23990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "27990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "16990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "22990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "28990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "34990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "40990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "19990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "26990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "33990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "40990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "47990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "23990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "31990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "39990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "47990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "55990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "12490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "16490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "20490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "24490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "28490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "17490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "23490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "29490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "35490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "41490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "21240 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "28490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "35740 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "42990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "50240 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "25490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "34490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "43490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "52490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "62490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "12590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "16590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "20590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "24590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "28590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "17590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "23590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "29590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "35590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "41590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "20590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "27590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "34590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "41590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "48590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "24590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "32590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "40590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "48590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "56590 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "12990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "16990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "20990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "24990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "28990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "17990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "23990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "29990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "35990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "41990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "21740 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "28990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "36240 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "43490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "50740 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "25990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "34990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "43990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "52990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "62990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "15990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "20990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "24990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "28990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "32990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "21990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "28990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "34990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "40990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "46990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "27240 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "35990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "43740 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "51490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "59240 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "32490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "42990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "52490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "61990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "71490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "19990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "25990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "31990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "37990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "43990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "24990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "32990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "40990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "48990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "56990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "27990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "36990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "45990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "54990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "63990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "31990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "41990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "51990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "61990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "71990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "20990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "26990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "32990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "38990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "44990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "25990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "33990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "41990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "49990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "57990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "29740 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "38990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "48240 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "57490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "66740 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "33990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "44990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "55990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "66990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "78990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "21990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "28990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "35990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "42990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "49990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "26990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "35990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "44990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "53990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "62990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "29990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "39990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "49990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "59990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "69990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "33990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "44990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "55990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "66990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "77990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "22990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "29990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "36990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "43990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "50990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "27990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "36990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "45990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "54990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "63990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "31740 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "41990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "52240 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "62490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "72740 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "35990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "47990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "59990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "71990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "84990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "30990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "42990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "54990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "66990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "78990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "36990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "50990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "64990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "78990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "92990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "42240 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "57990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "73740 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "89490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "105240 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "47490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "64990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "82490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "99990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "117490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "41990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "54990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "67990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "80990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "93990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "48990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "63990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "78990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "93990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "108990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "55490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "72990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "90490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "107990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "125490 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "61990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "81990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "101990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "121990 руб."
+    },
+    {
+        "Тип теплицы": "Арочная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "141990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "16990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "23990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "30990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "37990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "44990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "21990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "30990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "39990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "48990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "57990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "24990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "34990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "44990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "54990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "64990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "28990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "39990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "50990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "61990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "72990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "17990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "24990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "31990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "38990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "45990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "22990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "31990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "40990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "49990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "58990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "26740 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "36990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "47240 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "57490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "67740 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "30990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "42990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "54990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "66990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "79990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "22990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "30990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "38990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "46990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "54990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "28990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "38990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "48990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "58990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "68990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "34240 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "45990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "57740 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "69490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "81240 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "39490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "52990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "66490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "79990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "93490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "25990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "35990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "45990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "55990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "65990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "30990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "42990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "54990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "66990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "78990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "33990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "46990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "59990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "72990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "85990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "37990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "51990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "65990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "79990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "93990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "27990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "37990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "47990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "57990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "67990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "32990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "44990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "56990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "68990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "80990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "36740 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "49990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "63240 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "76490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "89740 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "40990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "55990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "70990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "85990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "101990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "36990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "51990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "66990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "81990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "96990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "42990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "59990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "76990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "93990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "110990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "48240 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "66990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "85740 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "104490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "123240 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "53490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "73990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "94490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "114990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "135490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "51990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "70990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "89990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "108990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "127990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "58990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "79990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "100990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "121990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "142990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "65490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "88990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "112490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "135990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "159490 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "71990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "97990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "123990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "149990 руб."
+    },
+    {
+        "Тип теплицы": "Прямостенная",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "175990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "14990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "19990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "24990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "29990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "34990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "19990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "26990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "33990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "40990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "47990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "22990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "30990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "38990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "46990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "54990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "26990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "35990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "44990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "53990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "62990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "15990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "20990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "25990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "30990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "35990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "20990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "27990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "34990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "41990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "48990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "24740 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "32990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "41240 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "49490 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "57740 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "28990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "38990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "48990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "58990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "69990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "28990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "39990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "50990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "61990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "72990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "34990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "47990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "60990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "73990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "86990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "40240 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "54990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "69740 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "84490 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "99240 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "45490 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "61990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "78490 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "94990 руб."
+    },
+    {
+        "Тип теплицы": "Каплевидная",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "111490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "23990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "31990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "39990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "47990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "55990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "28990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "38990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "48990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "58990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "68990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "31990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "42990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "53990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "64990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "75990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "35990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "47990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "59990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "71990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "83990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "29990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "37990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "45990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "53990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "61990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "34990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "44990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "54990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "64990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "74990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "38740 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "49990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "61240 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "72490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "83740 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "42990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "55990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "68990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "81990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "95990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "39990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "50990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "61990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "72990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "83990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "45990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "58990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "71990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "84990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "97990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "51240 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "65990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "80740 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "95490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "110240 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "56490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "72990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "89490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "105990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "122490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "34990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "44990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "54990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "64990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "74990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "39990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "51990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "63990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "75990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "87990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "42990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "55990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "68990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "81990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "94990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "46990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "60990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "74990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "88990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "2.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "102990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "37990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "48990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "59990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "70990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "81990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "42990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "55990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "68990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "81990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "94990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "46740 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "60990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "75240 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "89490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "103740 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "50990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "66990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "82990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "98990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "115990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "50990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "65990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "80990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "95990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "110990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "56990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "73990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "90990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "107990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "124990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "62240 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "80990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "99740 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "118490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "137240 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "67490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "87990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "108490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "128990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "3.5 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "149490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "65990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "87990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "109990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "131990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Без поликарбоната",
+        "Цена": "153990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "72990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "96990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "120990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "144990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Стандарт 4мм",
+        "Цена": "168990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "79490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "105990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "132490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "158990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Люкс 4мм",
+        "Цена": "185490 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "4 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "85990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "6 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "114990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "8 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "143990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "10 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "172990 руб."
+    },
+    {
+        "Тип теплицы": "Домиком",
+        "Каркас": "40х20 + 20х20",
+        "Ширина": "4 м",
+        "Длина": "12 м",
+        "Тип поликарбоната": "Поликарбонат Премиум 6мм",
+        "Цена": "201990 руб."
+    }
+];
+
+        // Данные о ширине в зависимости от типа теплицы
+        const widthOptions = {
+            "Арочная": ["2.5 м", "3 м", "3.5 м", "4 м"],
+            "Прямостенная": ["2.5 м", "3 м", "3.5 м", "4 м"],
+            "Каплевидная": ["2.5 м", "3 м", "3.5 м"],
+            "Домиком": ["2.5 м", "3 м", "3.5 м", "4 м"]
+        };
+
+        // Данные о каркасе в зависимости от типа теплицы
+        const frameOptions = {
+            "Арочная": ["20х20", "40х20", "20х20 + 20х20", "40х20 + 20х20"],
+            "Прямостенная": ["40х20", "40х20 + 20х20"],
+            "Каплевидная": ["40х20"],
+            "Домиком": ["40х20", "40х20 + 20х20"]
+        };
+
+        // Данные о количестве стяжек
+        const tiesData = {
+            "Арочная": { "2.5 м": 5, "3 м": 5, "3.5 м": 5, "4 м": 9 },
+            "Прямостенная": { "2.5 м": 7, "3 м": 7, "3.5 м": 7, "4 м": 9 },
+            "Каплевидная": { "2.5 м": 6, "3 м": 6, "3.5 м": 8 },
+            "Домиком": { "2.5 м": 6, "3 м": 6, "3.5 м": 6, "4 м": 8 }
+        };
+
+        // Данные о снеговой нагрузке
+        const snowLoadData = {
+            "Арочная": {
+                "20х20": 227,
+                "40х20": 272,
+                "20х20 + 20х20": 314,
+                "40х20 + 20х20": 825
+            },
+            "Каплевидная": { "40х20": 492 },
+            "Домиком": {
+                "40х20": 483,
+                "40х20 + 20х20": 1142
+            },
+            "Прямостенная": {
+                "40х20": 284,
+                "40х20 + 20х20": 838
             }
+        };
+
+        // Данные о высоте
+        const heightData = {
+            "Арочная": { "2.5 м": 2.1, "3 м": 2.1, "3.5 м": 2.1, "4 м": 2.8 },
+            "Прямостенная": { "2.5 м": 2.1, "3 м": 2.1, "3.5 м": 2.1, "4 м": 2.8 },
+            "Каплевидная": { "2.5 м": 2.4, "3 м": 2.4, "3.5 м": 2.8 },
+            "Домиком": { "2.5 м": 2.2, "3 м": 2.3, "3.5 м": 2.8, "4 м": 2.8 }
+        };
+
+        // Функция для обновления опций ширины
+        function updateWidthOptions() {
+            const type = document.getElementById('type').value;
+            const widthSelect = document.getElementById('width');
+            widthSelect.innerHTML = '';
+            widthOptions[type].forEach(width => {
+                const option = document.createElement('option');
+                option.value = width;
+                option.textContent = width;
+                widthSelect.appendChild(option);
+            });
+            updateFrameOptions();
         }
 
-        // Инициализация данных
-        const frameOptions = {
-            "Арочная": [
-                { value: 300, label: "20х20" },
-                { value: 400, label: "40х20" },
-                { value: 500, label: "20х20 + 20х20" },
-                { value: 600, label: "40х20 + 20х20" }
-            ],
-            "Прямостенная": [
-                { value: 400, label: "40х20" },
-                { value: 600, label: "40х20 + 20х20" }
-            ],
-            "Каплевидная": [
-                { value: 400, label: "40х20" }
-            ],
-            "Домиком": [
-                { value: 400, label: "40х20" },
-                { value: 600, label: "40х20 + 20х20" }
-            ]
-        };
-
-        const heightOptions = {
-            "Арочная": { "2.5": "2.1 м", "3": "2.1 м", "3.5": "2.1 м", "4": "2.8 м" },
-            "Прямостенная": { "2.5": "2.1 м", "3": "2.1 м", "3.5": "2.1 м", "4": "2.8 м" },
-            "Каплевидная": { "2.5": "2.4 м", "3": "2.4 м", "3.5": "2.8 м" },
-            "Домиком": { "2.5": "2.2 м", "3": "2.3 м", "3.5": "2.8 м", "4": "2.8 м" }
-        };
-
-        const snowLoad = {
-            "Арочная": {
-                "20х20": "227 кг/м²",
-                "40х20": "272 кг/м²",
-                "20х20 + 20х20": "314 кг/м²",
-                "40х20 + 20х20": {
-                    "2.5": "825 кг/м²",
-                    "3": "825 кг/м²",
-                    "3.5": "825 кг/м²",
-                    "4": "931 кг/м²"
-                }
-            },
-            "Каплевидная": { "40х20": "492 кг/м²" },
-            "Домиком": {
-                "40х20": "483 кг/м²",
-                "40х20 + 20х20": {
-                    "2.5": "1142 кг/м²",
-                    "3": "1142 кг/м²",
-                    "3.5": "1142 кг/м²",
-                    "4": "1328 кг/м²"
-                }
-            },
-            "Прямостенная": {
-                "40х20": "284 кг/м²",
-                "40х20 + 20х20": "838 кг/м²"
-            }
-        };
-
-        const tiesCount = {
-            "Арочная": { "2.5": "5 шт", "3": "5 шт", "3.5": "5 шт", "4": "9 шт" },
-            "Прямостенная": { "2.5": "7 шт", "3": "7 шт", "3.5": "7 шт", "4": "9 шт" },
-            "Каплевидная": { "2.5": "6 шт", "3": "6 шт", "3.5": "8 шт" },
-            "Домиком": { "2.5": "6 шт", "3": "6 шт", "3.5": "8 шт", "4": "8 шт" }
-        };
-
-        const assemblyCost = {
-            "Арочная": {
-                "2.5": { "4": 4990, "6": 6490, "8": 7990, "10": 9490, "12": 11990 },
-                "3": { "4": 4990, "6": 6490, "8": 7990, "10": 9490, "12": 11990 },
-                "3.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
-                "4": { "4": 7990, "6": 11490, "8": 14990, "10": 18490, "12": 22490 }
-            },
-            "Прямостенная": {
-                "2.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
-                "3": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
-                "3.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
-                "4": { "4": 7990, "6": 11490, "8": 14990, "10": 18490, "12": 22490 }
-            },
-            "Каплевидная": {
-                "2.5": { "4": 4990, "6": 6490, "8": 7990, "10": 9490, "12": 11990 },
-                "3": { "4": 4990, "6": 6490, "8": 7990, "10": 9490, "12": 11990 },
-                "3.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 }
-            },
-            "Домиком": {
-                "2.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
-                "3": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
-                "3.5": { "4": 5990, "6": 7990, "8": 9990, "10": 11990, "12": 13990 },
-                "4": { "4": 7990, "6": 11490, "8": 14990, "10": 18490, "12": 22490 }
-            }
-        };
-
-        const productPrices = {
-            "drip_mech": 1000,
-            "drip_auto": 1500,
-            "window_auto": 2000,
-            "tape_steam": 500,
-            "tape_zinc": 700,
-            "extra_window": 1200
-        };
-
-        // Обновление опций каркаса
+        // Функция для обновления опций каркаса
         function updateFrameOptions() {
-            const typeSelect = document.getElementById("type");
-            const frameSelect = document.getElementById("frame");
-            const selectedType = typeSelect.options[typeSelect.selectedIndex].text;
-
-            frameSelect.innerHTML = "";
-            frameOptions[selectedType].forEach(option => {
-                const newOption = document.createElement("option");
-                newOption.value = option.value;
-                newOption.text = option.label;
-                frameSelect.add(newOption);
+            const type = document.getElementById('type').value;
+            const frameSelect = document.getElementById('frame');
+            frameSelect.innerHTML = '';
+            frameOptions[type].forEach(frame => {
+                const option = document.createElement('option');
+                option.value = frame;
+                option.textContent = frame;
+                frameSelect.appendChild(option);
             });
         }
 
-        // Добавление дополнительного товара
+        // Функция для добавления нового товара
         function addProduct() {
             const productsList = document.getElementById("products-list");
             const productDiv = document.createElement("div");
@@ -564,12 +4832,12 @@
 
             const productSelect = document.createElement("select");
             productSelect.innerHTML = `
-                <option value="drip_mech">Капельный полив механический</option>
-                <option value="drip_auto">Капельный полив автоматический</option>
-                <option value="window_auto">Автомат для форточки</option>
-                <option value="tape_steam">Паропропускающая лента</option>
-                <option value="tape_zinc">Оцинкованная лента</option>
-                <option value="extra_window">Дополнительная форточка</option>
+                <option value="1690">Капельный полив механический</option>
+                <option value="4490">Капельный полив автоматический</option>
+                <option value="2590">Автомат для форточки</option>
+                <option value="1590">Паропропускающая лента</option>
+                <option value="1990">Оцинкованная лента</option>
+                <option value="1490">Дополнительная форточка</option>
             `;
 
             const quantityInput = document.createElement("input");
@@ -579,7 +4847,7 @@
 
             const removeButton = document.createElement("button");
             removeButton.className = "remove-btn";
-            removeButton.innerHTML = '<i class="fas fa-trash"></i>';
+            removeButton.innerHTML = '×';
             removeButton.onclick = () => productDiv.remove();
 
             productDiv.appendChild(productSelect);
@@ -588,72 +4856,90 @@
             productsList.appendChild(productDiv);
         }
 
-        // Расчет стоимости
-        function calculate() {
-            const type = getSelectedText("type");
-            const width = getSelectedValue("width");
-            const length = getSelectedValue("length");
-            const frame = getSelectedValue("frame");
-            const polycarbonate = getSelectedValue("polycarbonate");
-            const arcStep = getSelectedValue("arc-step");
-            const foundation = getSelectedValue("foundation");
-            const assembly = document.getElementById("assembly").value === "1" ? "С нашей сборкой" : "Без сборки";
-            const deliveryDistance = parseFloat(document.getElementById("delivery").value) || 0;
+        // Функция для расчёта итоговой стоимости
+        function calculatePrice() {
+            const type = document.getElementById('type').value;
+            const width = document.getElementById('width').value;
+            const length = document.getElementById('length').value;
+            const frame = document.getElementById('frame').value;
+            const polycarbonate = document.getElementById('polycarbonate').value;
+            const arcStep = parseFloat(document.getElementById('arcStep').value);
+            const foundation = document.getElementById('foundation').value;
+            const assembly = document.getElementById('assembly').value;
+            const delivery = parseInt(document.getElementById('delivery').value) || 0;
 
-            // Стоимость сборки
-            let assemblyCostValue = 0;
-            if (assembly === "С нашей сборкой") {
-                assemblyCostValue = assemblyCost[type][width][length];
-            }
+            // Поиск совпадений в JSON
+            const match = greenhousesData.find(item =>
+                item["Тип теплицы"] === type &&
+                item["Ширина"] === width &&
+                item["Длина"] === length &&
+                item["Каркас"] === frame &&
+                item["Тип поликарбоната"] === polycarbonate
+            );
 
-            // Стоимость доставки
-            let deliveryCost = 0;
-            if (assembly === "С нашей сборкой") {
-                deliveryCost = Math.max(1000, 40 * deliveryDistance);
+            if (match) {
+                // Извлечение цены из JSON и удаление "руб."
+                let basePrice = parseFloat(match["Цена"].replace(" руб.", ""));
+
+                // Учёт шага дуги
+                if (arcStep === 0.65) {
+                    basePrice *= 1.25;
+                }
+
+                // Учёт фундамента
+                const foundationPrices = {
+                    "Брус": { "4 м": 4790, "6 м": 6290, "8 м": 7790, "10 м": 9290, "12 м": 10790 },
+                    "Сваи": { "4 м": 2988, "6 м": 3984, "8 м": 4980, "10 м": 5976, "12 м": 6972 },
+                    "Без фундамента": { "4 м": 0, "6 м": 0, "8 м": 0, "10 м": 0, "12 м": 0 }
+                };
+                const foundationPrice = foundationPrices[foundation][length] || 0;
+
+                // Учёт сборки
+                let assemblyPrice = 0;
+                if (assembly === "Наша сборка") {
+                    assemblyPrice = assemblyPrices[type][width][length] || 0;
+                }
+
+                // Учёт доставки
+                const deliveryPrice = Math.max(1000, delivery * 40);
+
+                // Учёт дополнительных товаров
+                let additionalProductsCost = 0;
+                const products = document.querySelectorAll("#products-list .product");
+                products.forEach(product => {
+                    const quantity = parseFloat(product.querySelector("input").value) || 0;
+                    const price = parseFloat(product.querySelector("select").value) || 0;
+                    additionalProductsCost += quantity * price;
+                });
+
+                // Общая стоимость
+                const totalPrice = basePrice + foundationPrice + assemblyPrice + deliveryPrice + additionalProductsCost;
+                document.getElementById('totalPrice').innerText = `Итоговая стоимость: ${totalPrice.toFixed(2)} руб`;
             } else {
-                deliveryCost = Math.max(1000, 40 * deliveryDistance + 500);
+                document.getElementById('totalPrice').innerText = "Теплица с такими параметрами не найдена.";
             }
-
-            // Стоимость дополнительных товаров
-            let additionalProductsCost = 0;
-            const products = document.querySelectorAll("#products-list .product");
-            products.forEach(product => {
-                const quantity = parseFloat(product.querySelector("input").value) || 0;
-                const price = productPrices[product.querySelector("select").value] || 0;
-                additionalProductsCost += quantity * price;
-            });
-
-            // Общая стоимость
-            const totalCost = parseFloat(document.getElementById('type').value) +
-                (width * length * parseFloat(frame)) +
-                (width * length * parseFloat(polycarbonate)) +
-                parseFloat(foundation) +
-                assemblyCostValue +
-                deliveryCost +
-                additionalProductsCost;
-
-            // Обновление результата
-            document.getElementById("result").innerText = `Общая стоимость: ${totalCost.toFixed(2)} руб`;
         }
 
-        // Отображение деталей расчета
-        function showCalculation() {
-            const type = getSelectedText("type");
-            const width = getSelectedValue("width");
-            const length = getSelectedValue("length");
-            const frame = getSelectedText("frame");
-            const polycarbonate = getSelectedText("polycarbonate");
-            const arcStep = getSelectedValue("arc-step");
-            const foundation = getSelectedText("foundation");
-            const assembly = document.getElementById("assembly").value === "1" ? "С нашей сборкой" : "Без сборки";
-            const deliveryDistance = parseFloat(document.getElementById("delivery").value) || 0;
+        // Функция для отображения модального окна
+        function showModal() {
+            const type = document.getElementById('type').value;
+            const width = document.getElementById('width').value;
+            const length = document.getElementById('length').value;
+            const frame = document.getElementById('frame').value;
+            const polycarbonate = document.getElementById('polycarbonate').value;
+            const arcStep = document.getElementById('arcStep').value;
+            const foundation = document.getElementById('foundation').value;
+            const assembly = document.getElementById('assembly').value;
+            const totalPrice = document.getElementById('totalPrice').innerText;
 
-            const height = heightOptions[type][width];
-            const snowLoadValue = frame === "40х20 + 20х20" ? snowLoad[type][frame][width] : snowLoad[type][frame] || "Не указано";
-            const tiesCountValue = tiesCount[type][width];
+            // Получение данных о стяжках, снеговой нагрузке и высоте
+            const ties = tiesData[type][width];
+            const snowLoad = snowLoadData[type][frame] || 0;
+            const height = heightData[type][width];
 
-            const popupContent = `
-                Тип теплицы: ${type}
+            // Формирование текста для модального окна
+            const modalText = `
+                ТЕПЛИЦА ${type}
                 ☀️ Поликарбонат с защитой от ультрафиолета UV-400
                 ⚙️ Цельногнутые дуги из стальной замкнутой трубы
                 ⚙️ Каркас из оцинкованной внутри и снаружи стали (полностью защита от ржавчины и коррозии)
@@ -662,65 +4948,47 @@
                 ✏️ Гарантия 15 лет!!!
                 -----------------
                 Каркас: ${frame}
-                Шаг дуги: ${arcStep}
-                Поликарбонат: ${polycarbonate} с защитой от ультрафиолета
-                Размеры (ШхДхВ): ${width} x ${length} x ${height}
-                Снеговая нагрузка: ${snowLoadValue}
-                Количество стяжек: ${tiesCountValue}
+                Шаг дуги: ${arcStep} м
+                Поликарбонат: ${polycarbonate}
+                Размеры (ШхДхВ): ${width}х${length}х${height} м
+                Снеговая нагрузка: ${snowLoad} кг/м²
+                Горизонтальные стяжки: ${ties} шт
                 Комплектация: 2 двери, 2 форточки
                 Фундамент: ${foundation}
                 Сборка: ${assembly}
-                Доставка: ${deliveryDistance} км
                 -----------------
-                Стоимость со скидкой до ${getDiscountDate()}: ${document.getElementById("result").innerText}
-                (в стоимость включены: чек, каркас на краб-системе, поликарбонат, инструкция по сборке)
+                Стоимость теплицы со скидкой до ${getFutureDate(6)}: ${totalPrice} (в ст. включены: товарный чек, каркас на краб-системе, поликарбонат, инструкция по сборке)
             `;
 
-            document.getElementById("popup-content").innerText = popupContent;
-            document.getElementById("overlay").style.display = "block";
-            document.getElementById("popup").style.display = "block";
+            // Вставка текста в модальное окно
+            document.getElementById('modalText').innerText = modalText;
+
+            // Отображение модального окна
+            document.getElementById('modal').style.display = 'flex';
         }
 
-        // Получение текста выбранного элемента
-        function getSelectedText(id) {
-            return document.getElementById(id).options[document.getElementById(id).selectedIndex].text;
+        // Функция для закрытия модального окна
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
         }
 
-        // Получение значения выбранного элемента
-        function getSelectedValue(id) {
-            return parseFloat(document.getElementById(id).value);
-        }
-
-        // Получение даты скидки
-        function getDiscountDate() {
-            const date = new Date();
-            date.setDate(date.getDate() + 7);
-            return date.toLocaleDateString("ru-RU");
-        }
-
-        // Копирование текста в буфер обмена
-        function copyToClipboard() {
-            const text = document.getElementById("popup-content").innerText;
+        // Функция для копирования текста
+        function copyText() {
+            const text = document.getElementById('modalText').innerText;
             navigator.clipboard.writeText(text).then(() => {
-                alert("Текст скопирован!");
+                alert('Текст скопирован!');
             });
         }
 
-        // Закрытие всплывающего окна
-        document.getElementById("overlay").addEventListener("click", () => {
-            document.getElementById("overlay").style.display = "none";
-            document.getElementById("popup").style.display = "none";
-        });
+        // Функция для получения даты + n дней
+        function getFutureDate(days) {
+            const date = new Date();
+            date.setDate(date.getDate() + days);
+            return date.toLocaleDateString('ru-RU');
+        }
 
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', () => {
-            updateFrameOptions();
-            document.getElementById("delivery").addEventListener("input", () => {
-                if (document.getElementById("delivery").value < 0) {
-                    document.getElementById("delivery").value = 0;
-                }
-            });
-        });
+        // Инициализация ширины и каркаса при загрузке страницы
+        updateWidthOptions();
     </script>
 </body>
 </html>
