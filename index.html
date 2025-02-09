@@ -54,7 +54,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
         }
         .delivery-modal-content {
             background: white;
@@ -63,6 +63,7 @@
             max-width: 300px;
             width: 100%;
             text-align: center;
+            margin-top: 80px;
         }
         .delivery-modal-content input {
             width: 100%;
@@ -5109,47 +5110,50 @@
 
         // Инициализация
         updateWidthOptions();
-        
+
         function calculatePrice() {
-            const type = document.getElementById('type').value;
-            const width = document.getElementById('width').value;
-            const length = document.getElementById('length').value;
-            const frame = document.getElementById('frame').value;
-            const polycarbonate = document.getElementById('polycarbonate').value;
-            const arcStep = parseFloat(document.getElementById('arcStep').value);
-            const foundation = document.getElementById('foundation').value;
-            const assembly = document.getElementById('assembly').value;
-            const delivery = parseInt(document.getElementById('delivery').value) || 0;
+    const type = document.getElementById('type').value;
+    const width = document.getElementById('width').value;
+    const length = document.getElementById('length').value;
+    const frame = document.getElementById('frame').value;
+    const polycarbonate = document.getElementById('polycarbonate').value;
+    const arcStep = parseFloat(document.getElementById('arcStep').value);
+    const foundation = document.getElementById('foundation').value;
+    const assembly = document.getElementById('assembly').value;
+    const delivery = parseInt(document.getElementById('delivery').value) || 0;
 
-            const match = greenhousesData.find(item =>
-                item["Тип теплицы"] === type &&
-                item["Ширина"] === width &&
-                item["Длина"] === length &&
-                item["Каркас"] === frame &&
-                item["Тип поликарбоната"] === polycarbonate
-            );
+    const match = greenhousesData.find(item =>
+        item["Тип теплицы"] === type &&
+        item["Ширина"] === width &&
+        item["Длина"] === length &&
+        item["Каркас"] === frame &&
+        item["Тип поликарбоната"] === polycarbonate
+    );
 
-            if (match) {
-                let basePrice = parseFloat(match["Цена"].replace(" руб.", ""));
-                if (arcStep === 0.65) basePrice *= 1.25;
+    if (match) {
+        let basePrice = parseFloat(match["Цена"].replace(" руб.", ""));
+        if (arcStep === 0.65) basePrice *= 1.25;
 
-                const foundationPrice = foundationPrices[foundation][length] || 0;
-                const assemblyPrice = assembly === "Наша сборка" ? assemblyPrices[type][width][length] || 0 : 0;
-                const deliveryPrice = Math.max(1000, delivery * 40);
+        const foundationPrice = foundationPrices[foundation][length] || 0;
+        const assemblyPrice = assembly === "Наша сборка" ? assemblyPrices[type][width][length] || 0 : 0;
+        const deliveryPrice = Math.max(1000, delivery * 40);
 
-                let additionalProductsCost = 0;
-                document.querySelectorAll("#products-list .product").forEach(product => {
-                    const quantity = parseFloat(product.querySelector("input").value) || 0;
-                    const price = parseFloat(product.querySelector("select").value) || 0;
-                    additionalProductsCost += quantity * price;
-                });
+        let additionalProductsCost = 0;
+        document.querySelectorAll("#products-list .product").forEach(product => {
+    const productSelect = product.querySelector("select:nth-child(1)"); // Выбор товара
+    const quantitySelect = product.querySelector("select:nth-child(2)"); // Выбор количества
 
-                const totalPrice = basePrice + foundationPrice + assemblyPrice + deliveryPrice + additionalProductsCost;
-                totalPriceDiv.innerText = `Итоговая стоимость: ${totalPrice.toFixed(2)} руб`;
-            } else {
-                totalPriceDiv.innerText = "Теплица с такими параметрами не найдена.";
-            }
-        }
+    const quantity = parseFloat(quantitySelect.value) || 0;
+    const price = parseFloat(productSelect.value) || 0;
+    additionalProductsCost += quantity * price;
+});
+
+        const totalPrice = basePrice + foundationPrice + assemblyPrice + deliveryPrice + additionalProductsCost;
+        totalPriceDiv.innerText = `Итоговая стоимость: ${totalPrice.toFixed(2)} руб`;
+    } else {
+        totalPriceDiv.innerText = "Теплица с такими параметрами не найдена.";
+    }
+}
 
         function showModal() {
             const type = typeSelect.value;
