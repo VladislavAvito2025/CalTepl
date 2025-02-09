@@ -674,8 +674,7 @@ function updateCity() {
         // Инициализация
         updateWidthOptions();
 // Обновляем функцию calculatePrice для учета города
-function calculatePrice() {
-    const city = document.getElementById('city').value;
+async function calculatePrice() {
     const type = document.getElementById('type').value;
     const width = document.getElementById('width').value;
     const length = document.getElementById('length').value;
@@ -686,14 +685,23 @@ function calculatePrice() {
     const assembly = document.getElementById('assembly').value;
     const delivery = parseInt(document.getElementById('delivery').value) || 0;
 
-    // Ищем теплицу с учетом города
-    const match = greenhousesData.find(item =>
+    // Загрузка данных из JSON-файлов
+    const regions = ['kazan', 'msk', 'orel']; // Добавьте другие регионы по необходимости
+    let allData = [];
+
+    for (const region of regions) {
+        const response = await fetch(`data_${region}.json`);
+        const data = await response.json();
+        allData = allData.concat(data);
+    }
+
+    // Поиск совпадения в данных
+    const match = allData.find(item =>
         item["Тип теплицы"] === type &&
         item["Ширина"] === width &&
         item["Длина"] === length &&
         item["Каркас"] === frame &&
-        item["Тип поликарбоната"] === polycarbonate &&
-        item["Город"] === city
+        item["Тип поликарбоната"] === polycarbonate
     );
 
     if (match) {
@@ -708,6 +716,7 @@ function calculatePrice() {
         document.querySelectorAll("#products-list .product").forEach(product => {
             const productSelect = product.querySelector("select:nth-child(1)");
             const quantitySelect = product.querySelector("select:nth-child(2)");
+
             const quantity = parseFloat(quantitySelect.value) || 0;
             const price = parseFloat(productSelect.value) || 0;
             additionalProductsCost += quantity * price;
