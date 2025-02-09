@@ -6,14 +6,19 @@
     <title>ЛУКОМОРЬЕ</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: white;
-            padding: 16px;
-            margin: 0;
+            overflow: hidden; /* Запрет прокрутки */
+            width: 100%; /* Ширина на весь экран */
+            height: 100%; /* Высота на весь экран */
+            margin: 0; /* Убираем отступы */
+            padding: 0; /* Убираем внутренние отступы */
         }
         .container {
-            max-width: 100%;
-            margin: 0 auto;
+            width: 100%; /* Ширина на весь экран */
+            height: 100%; /* Высота на весь экран */
+            overflow: hidden; /* Запрет прокрутки внутри контейнера */
+            margin: 0; /* Убираем отступы */
+            padding: 16px; /* Внутренние отступы, если нужны */
+            box-sizing: border-box; /* Учитываем padding в общей ширине и высоте */
         }
         h2 {
             color: #333;
