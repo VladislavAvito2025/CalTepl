@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ЛУКОМОРЬЕ</title>
     <style>
+        /* Общие стили */
+        * {
+            box-sizing: border-box; /* Учитываем padding и border в ширине */
+            margin: 0;
+            padding: 0;
+        }
         html, body {
             width: 100%;
             height: 100%;
@@ -14,8 +20,45 @@
         .container {
             width: 100%;
             max-width: 100%; /* Ограничиваем ширину контейнера */
-            padding: 0;
+            padding: 16px;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Выравниваем элементы по центру */
+        }
+
+        /* Стили для поля ввода "Доставка" */
+        #delivery {
+            width: 50%; /* Уменьшаем ширину до 50% */
+            max-width: 300px; /* Ограничиваем максимальную ширину */
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+        #delivery:focus {
+            border-color: #007BFF;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+            background: #fff;
+        }
+
+        /* Стили для блока "Итоговая стоимость" */
+        .price {
+            width: 50%; /* Уменьшаем ширину до 50% */
+            max-width: 300px; /* Ограничиваем максимальную ширину */
+            padding: 16px;
+            margin-bottom: 16px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 20px;
+            color: #333;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
         }
         h2 {
             color: #333;
