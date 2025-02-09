@@ -5111,15 +5111,15 @@
         updateWidthOptions();
         
         function calculatePrice() {
-            const type = typeSelect.value;
-            const width = widthSelect.value;
-            const length = lengthSelect.value;
-            const frame = frameSelect.value;
-            const polycarbonate = polycarbonateSelect.value;
-            const arcStep = parseFloat(arcStepSelect.value);
-            const foundation = foundationSelect.value;
-            const assembly = assemblySelect.value;
-            const delivery = parseInt(deliveryInput.value) || 0;
+            const type = document.getElementById('type').value;
+            const width = document.getElementById('width').value;
+            const length = document.getElementById('length').value;
+            const frame = document.getElementById('frame').value;
+            const polycarbonate = document.getElementById('polycarbonate').value;
+            const arcStep = parseFloat(document.getElementById('arcStep').value);
+            const foundation = document.getElementById('foundation').value;
+            const assembly = document.getElementById('assembly').value;
+            const delivery = parseInt(document.getElementById('delivery').value) || 0;
 
             const match = greenhousesData.find(item =>
                 item["Тип теплицы"] === type &&
