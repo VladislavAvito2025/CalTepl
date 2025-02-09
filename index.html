@@ -375,19 +375,6 @@
                 }
             }
         }, { passive: false });
-
-        document.getElementById('delivery').addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault(); // Предотвращаем стандартное поведение (выход из поля ввода)
-        
-        // Сохраняем введённые данные или выполняем нужные действия
-        const inputValue = this.value;
-        console.log('Введённое значение:', inputValue);
-        
-        // Например, можно вызвать функцию calculatePrice() для расчёта стоимости
-        calculatePrice();
-    }
-});
         
         const greenhousesData = [
     {
