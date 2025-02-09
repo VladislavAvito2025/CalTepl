@@ -4997,35 +4997,41 @@
         }
 
         function addProduct() {
-            const productDiv = document.createElement("div");
-            productDiv.className = "product";
+    const productDiv = document.createElement("div");
+    productDiv.className = "product";
 
-            const productSelect = document.createElement("select");
-            productSelect.innerHTML = `
-                <option value="1690">Капельный полив механический</option>
-                <option value="4490">Капельный полив автоматический</option>
-                <option value="2590">Автомат для форточки</option>
-                <option value="1590">Паропропускающая лента</option>
-                <option value="1990">Оцинкованная лента</option>
-                <option value="1490">Дополнительная форточка</option>
-            `;
+    // Создаем выпадающий список для товаров
+    const productSelect = document.createElement("select");
+    productSelect.innerHTML = `
+        <option value="1690">Капельный полив механический</option>
+        <option value="4490">Капельный полив автоматический</option>
+        <option value="2590">Автомат для форточки</option>
+        <option value="1590">Паропропускающая лента</option>
+        <option value="1990">Оцинкованная лента</option>
+        <option value="1490">Дополнительная форточка</option>
+    `;
+            // Создаем поле ввода для количества
+    const quantityInput = document.createElement("input");
+    quantityInput.type = "number";
+    quantityInput.min = "1"; // Минимальное значение
+    quantityInput.max = "5"; // Максимальное значение
+    quantityInput.value = "1"; // Значение по умолчанию
+    quantityInput.placeholder = "Количество";
 
-            const quantityInput = document.createElement("input");
-            quantityInput.type = "number";
-            quantityInput.min = "0";
-            quantityInput.placeholder = "Количество";
+    // Создаем кнопку удаления товара
+    const removeButton = document.createElement("button");
+    removeButton.className = "remove-btn";
+    removeButton.innerHTML = '×';
+    removeButton.onclick = () => productDiv.remove();
 
-            const removeButton = document.createElement("button");
-            removeButton.className = "remove-btn";
-            removeButton.innerHTML = '×';
-            removeButton.onclick = () => productDiv.remove();
+    // Добавляем элементы в контейнер товара
+    productDiv.appendChild(productSelect);
+    productDiv.appendChild(quantityInput);
+    productDiv.appendChild(removeButton);
 
-            productDiv.appendChild(productSelect);
-            productDiv.appendChild(quantityInput);
-            productDiv.appendChild(removeButton);
-            productsList.appendChild(productDiv);
-        }
-
+    // Добавляем товар в список
+    productsList.appendChild(productDiv);
+}
         function calculatePrice() {
             const type = typeSelect.value;
             const width = widthSelect.value;
