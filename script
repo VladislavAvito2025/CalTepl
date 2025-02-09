@@ -6,7 +6,8 @@
     <title>ЛУКОМОРЬЕ</title>
     <style>
         body {
-            overflow: hidden; /* Запрет прокрутки */
+            overflow-x: hidden; /* Запрет горизонтальной прокрутки */
+            overflow-y: auto; /* Разрешение вертикальной прокрутки */
             width: 100%; /* Ширина на весь экран */
             height: 100%; /* Высота на весь экран */
             margin: 0; /* Убираем отступы */
@@ -14,8 +15,7 @@
         }
         .container {
             width: 100%; /* Ширина на весь экран */
-            height: auto; /* Высота на весь экран */
-            overflow: hidden; /* Запрет прокрутки внутри контейнера */
+            min-height: 100%; /* Минимальная высота на весь экран */
             margin: 0; /* Убираем отступы */
             padding: 16px; /* Внутренние отступы, если нужны */
             box-sizing: border-box; /* Учитываем padding в общей ширине и высоте */
@@ -314,6 +314,24 @@
             tg.expand();
             tg.ready(); // Уведомляем Telegram, что приложение готово
         }
+
+        <div class="container" id="mainContent" style="display: none;">
+        <!-- Ваш контент -->
+        <div style="height: 1500px; background: linear-gradient(180deg, #f06, #06f);">
+            Длинный контент для проверки прокрутки
+        </div>
+    </div>
+
+        // Запрет горизонтальной прокрутки на touch-устройствах
+        document.addEventListener('touchmove', function (event) {
+            if (event.touches.length === 1) {
+                const touch = event.touches[0];
+                const scrollable = touch.clientX > window.innerWidth * 0.1 && touch.clientX < window.innerWidth * 0.9;
+                if (!scrollable) {
+                    event.preventDefault(); // Запрещаем горизонтальную прокрутку
+                }
+            }
+        }, { passive: false });
 
         const greenhousesData = [
     {
