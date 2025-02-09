@@ -262,7 +262,7 @@
 </head>
 <body>
     <div class="container" id="mainContent" style="display: none;">
-        <h2>Конфигуратор теплиц</h2>
+        <h2>ЛУКОМОРЬЕ</h2>
         <form id="greenhouseConfigurator">
             <label for="type">Тип теплицы:</label>
             <select id="type" name="type" onchange="updateWidthOptions()">
@@ -327,7 +327,9 @@
 
             <button type="button" onclick="calculatePrice()">Рассчитать стоимость</button>
         </form>
-        <div class="price" id="totalPrice" onclick="showModal()">Итоговая стоимость: 0 руб</div>
+        <!-- Кнопка и блок "Итоговая стоимость" -->
+            <button type="button" onclick="calculatePrice()">Рассчитать стоимость</button>
+            <div class="price" id="totalPrice" onclick="showModal()">Итоговая стоимость: 0 руб</div>
     </div>
 
     <!-- Модальное окно для пароля -->
