@@ -219,6 +219,13 @@
     </style>
 </head>
 <body>
+     <div class="container" id="mainContent" style="display: none;">
+        <!-- Ваш контент -->
+        <div style="height: 1500px; background: linear-gradient(180deg, #f06, #06f);">
+            Длинный контент для проверки прокрутки
+        </div>
+    </div>
+
     <div class="container" id="mainContent" style="display: none;">
         <h2>Конфигуратор теплиц</h2>
         <form id="greenhouseConfigurator">
@@ -314,13 +321,6 @@
             tg.expand();
             tg.ready(); // Уведомляем Telegram, что приложение готово
         }
-
-        <div class="container" id="mainContent" style="display: none;">
-        <!-- Ваш контент -->
-        <div style="height: 1500px; background: linear-gradient(180deg, #f06, #06f);">
-            Длинный контент для проверки прокрутки
-        </div>
-    </div>
 
         // Запрет горизонтальной прокрутки на touch-устройствах
         document.addEventListener('touchmove', function (event) {
