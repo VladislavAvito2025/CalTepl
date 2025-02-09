@@ -7,30 +7,29 @@
     <style>
         /* Общие стили */
         * {
-            box-sizing: border-box; /* Учитываем padding и border в ширине */
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
         html, body {
             width: 100%;
             height: 100%;
-            overflow-x: hidden; /* Запрет горизонтальной прокрутки */
-            overflow-y: auto; /* Разрешение вертикальной прокрутки */
+            overflow-x: hidden;
+            overflow-y: auto;
         }
         .container {
             width: 100%;
-            max-width: 100%; /* Ограничиваем ширину контейнера */
+            max-width: 100%;
             padding: 16px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Выравниваем элементы по центру */
+            align-items: center;
         }
-
         /* Стили для поля ввода "Доставка" */
         #delivery {
-            width: 50%; /* Уменьшаем ширину до 50% */
-            max-width: 300px; /* Ограничиваем максимальную ширину */
+            width: 50%;
+            max-width: 300px;
             padding: 12px;
             margin-bottom: 16px;
             border: 1px solid #ddd;
@@ -38,11 +37,51 @@
             font-size: 16px;
             background: #f9f9f9;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         #delivery:focus {
             border-color: #007BFF;
             box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
             background: #fff;
+        }
+        /* Стили для модального окна доставки */
+        .delivery-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .delivery-modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 300px;
+            width: 100%;
+            text-align: center;
+        }
+        .delivery-modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .delivery-modal-content button {
+            width: 100%;
+            padding: 10px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .delivery-modal-content button:hover {
+            background: #0056b3;
         }
 
         /* Стили для блока "Итоговая стоимость" */
@@ -316,12 +355,12 @@
 
             <label for="delivery">Доставка (км):</label>
             <input
-                type="number"
-                inputmode="numeric"
+                type="text"
                 id="delivery"
                 name="delivery"
-                min="0"
                 placeholder="Введите расстояние"
+                readonly
+                onclick="showDeliveryModal()"
             >
 
             <div class="additional-products">
@@ -336,6 +375,15 @@
         </form>
         <!-- Кнопка и блок "Итоговая стоимость" -->
             <div class="price" id="totalPrice" onclick="showModal()">Итоговая стоимость: 0 руб</div>
+    </div>
+
+    <!-- Модальное окно для ввода расстояния доставки -->
+    <div class="delivery-modal" id="deliveryModal">
+        <div class="delivery-modal-content">
+            <h3>Введите расстояние доставки (км)</h3>
+            <input type="number" id="deliveryInput" placeholder="Расстояние" min="0">
+            <button onclick="setDelivery()">ОК</button>
+        </div>
     </div>
 
     <!-- Модальное окно для пароля -->
@@ -375,6 +423,20 @@
                 }
             }
         }, { passive: false });
+
+         // Функция для отображения модального окна доставки
+         function showDeliveryModal() {
+            const deliveryModal = document.getElementById('deliveryModal');
+            deliveryModal.style.display = 'flex';
+        }
+
+        // Функция для установки значения доставки
+        function setDelivery() {
+            const deliveryInput = document.getElementById('deliveryInput');
+            const deliveryField = document.getElementById('delivery');
+            deliveryField.value = deliveryInput.value;
+            document.getElementById('deliveryModal').style.display = 'none';
+        }
         
         const greenhousesData = [
     {
@@ -4985,10 +5047,18 @@
             updateFrameOptions();
         }
 
+        // Функция для обновления доступных каркасов
         function updateFrameOptions() {
             const type = typeSelect.value;
+            const width = widthSelect.value;
             frameSelect.innerHTML = '';
-            frameOptions[type].forEach(frame => {
+
+            let frames = frameOptions[type];
+            if (width === "4 м") {
+                frames = ["40х20 + 20х20"]; // Ограничение для ширины 4 м
+            }
+
+            frames.forEach(frame => {
                 const option = document.createElement('option');
                 option.value = frame;
                 option.textContent = frame;
@@ -4996,42 +5066,50 @@
             });
         }
 
+        // Функция для добавления товара
         function addProduct() {
-    const productDiv = document.createElement("div");
-    productDiv.className = "product";
+            const productDiv = document.createElement("div");
+            productDiv.className = "product";
 
-    // Создаем выпадающий список для товаров
-    const productSelect = document.createElement("select");
-    productSelect.innerHTML = `
-        <option value="1690">Капельный полив механический</option>
-        <option value="4490">Капельный полив автоматический</option>
-        <option value="2590">Автомат для форточки</option>
-        <option value="1590">Паропропускающая лента</option>
-        <option value="1990">Оцинкованная лента</option>
-        <option value="1490">Дополнительная форточка</option>
-    `;
-            // Создаем поле ввода для количества
-    const quantityInput = document.createElement("input");
-    quantityInput.type = "number";
-    quantityInput.min = "1"; // Минимальное значение
-    quantityInput.max = "5"; // Максимальное значение
-    quantityInput.value = "1"; // Значение по умолчанию
-    quantityInput.placeholder = "Количество";
+            // Выпадающий список для товаров
+            const productSelect = document.createElement("select");
+            productSelect.innerHTML = `
+                <option value="1690">Капельный полив механический</option>
+                <option value="4490">Капельный полив автоматический</option>
+                <option value="2590">Автомат для форточки</option>
+                <option value="1590">Паропропускающая лента</option>
+                <option value="1990">Оцинкованная лента</option>
+                <option value="1490">Дополнительная форточка</option>
+            `;
 
-    // Создаем кнопку удаления товара
-    const removeButton = document.createElement("button");
-    removeButton.className = "remove-btn";
-    removeButton.innerHTML = '×';
-    removeButton.onclick = () => productDiv.remove();
+            // Выпадающий список для количества (1, 2, 3, 4, 5)
+            const quantitySelect = document.createElement("select");
+            quantitySelect.innerHTML = `
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            `;
 
-    // Добавляем элементы в контейнер товара
-    productDiv.appendChild(productSelect);
-    productDiv.appendChild(quantityInput);
-    productDiv.appendChild(removeButton);
+            // Кнопка удаления товара
+            const removeButton = document.createElement("button");
+            removeButton.className = "remove-btn";
+            removeButton.innerHTML = '×';
+            removeButton.onclick = () => productDiv.remove();
 
-    // Добавляем товар в список
-    productsList.appendChild(productDiv);
-}
+            // Добавляем элементы в контейнер товара
+            productDiv.appendChild(productSelect);
+            productDiv.appendChild(quantitySelect);
+            productDiv.appendChild(removeButton);
+
+            // Добавляем товар в список
+            productsList.appendChild(productDiv);
+        }
+
+        // Инициализация
+        updateWidthOptions();
+        
         function calculatePrice() {
             const type = typeSelect.value;
             const width = widthSelect.value;
